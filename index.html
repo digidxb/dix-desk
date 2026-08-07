@@ -278,7 +278,7 @@ function siteSummary(desks) {
 function inUseCount(desks, k) { return k === "monitors" ? desks.reduce((s, d) => s + d.equipment.monitors, 0) : desks.filter((d) => d.equipment[k]).length; }
 
 // ---- Freeform floor canvas: draggable desks + draggable/resizable zone boxes ----
-function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMoveDesk, onRotateDesk, onSelectDesk, onMoveZone, onResizeZone, onEditZone, onToggleDoor, onRemoveZone }) {
+function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMoveDesk, onRotateDesk, onSelectDesk, onRemoveDesk, onMoveZone, onResizeZone, onEditZone, onToggleDoor, onRemoveZone }) {
   function startDeskDrag(e, desk) {
     if (!canEdit) return;
     e.stopPropagation();
@@ -377,8 +377,12 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
             </div>
             {d.user && <span className="pointer-events-none absolute -top-5 left-1/2 z-20 hidden -translate-x-1/2 whitespace-nowrap rounded bg-white px-1.5 py-0.5 text-[9px] shadow-sm group-hover:block" style={{ color: C.text, border: `1px solid ${C.grid}` }}>{d.user}</span>}
             {canEdit && (
-              <button className="absolute -top-2 -left-2 hidden h-4 w-4 items-center justify-center rounded-full text-[9px] text-white group-hover:flex" style={{ background: C.text }}
-                onPointerDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRotateDesk(d.id); }}><RotateCw className="h-2.5 w-2.5" /></button>
+              <>
+                <button className="absolute -top-2 -left-2 hidden h-4 w-4 items-center justify-center rounded-full text-[9px] text-white group-hover:flex" style={{ background: C.text }}
+                  onPointerDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRotateDesk(d.id); }}><RotateCw className="h-2.5 w-2.5" /></button>
+                <button className="absolute -top-2 -right-2 hidden h-4 w-4 items-center justify-center rounded-full text-[10px] text-white group-hover:flex" style={{ background: C.text }}
+                  onPointerDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemoveDesk(d.id); }} title="Remove desk">×</button>
+              </>
             )}
           </div>
         );
@@ -791,6 +795,13 @@ function DeskDashboard() {
     const next = desks.map((d) => (d.id === id ? { ...d, rot: ((d.rot || 0) + 90) % 360 } : d));
     persistAll(sites, next, stock, zones, assets);
   }
+  function removeDesk(sk, id) {
+    pushUndo();
+    const nd = desks.filter((d) => d.id !== id);
+    const ns = sites.map((s) => (s.key === sk ? { ...s, deskCount: Math.max(0, s.deskCount - 1) } : s));
+    persistAll(ns, nd, stock, zones, assets);
+    setSelected((c) => (c && c.id === id ? null : c));
+  }
 
   function updateSiteCanvas(key, w, h) {
     persistAll(sites.map((s) => (s.key === key ? { ...s, canvasW: Math.max(400, w), canvasH: Math.max(300, h) } : s)), desks, stock, zones, assets);
@@ -1087,6 +1098,7 @@ function DeskDashboard() {
                       onDragStart={pushUndo}
                       onMoveDesk={moveDesk}
                       onRotateDesk={rotateDesk}
+                      onRemoveDesk={(id) => removeDesk(s.key, id)}
                       onSelectDesk={setSelected}
                       onMoveZone={(id, x, y) => moveZone(s.key, id, x, y)}
                       onResizeZone={(id, w, h) => resizeZone(s.key, id, w, h)}
