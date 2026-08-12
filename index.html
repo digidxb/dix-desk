@@ -126,6 +126,8 @@ function Download({ className }) { return <svg className={className} {...iconBas
 function Upload({ className }) { return <svg className={className} {...iconBase}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>; }
 function Undo2({ className }) { return <svg className={className} {...iconBase}><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>; }
 function Cable({ className }) { return <svg className={className} {...iconBase}><path d="M3 12h4l2-3 4 6 2-3h6"/><circle cx="20" cy="12" r="1.5"/><circle cx="4" cy="12" r="1.5"/></svg>; }
+function Receipt({ className }) { return <svg className={className} {...iconBase}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="12" y2="15"/></svg>; }
+function ClipboardList({ className }) { return <svg className={className} {...iconBase}><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="9.01" y2="12"/><line x1="13" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="9.01" y2="16"/><line x1="13" y1="16" x2="15" y2="16"/></svg>; }
 
 const C = { bg: "#F7F9FB", card: "#FFFFFF", border: "#DCE3EA", zone: "#EAF3FB", zoneBorder: "#4A90D9", grid: "#EEF1F4", text: "#2B3A46", sub: "#6B7A87", primary: "#0078D4" };
 
@@ -152,7 +154,7 @@ const PRESET_ITEMS = [
 ];
 
 const DEFAULT_SITES = [
-  { key: "dubai", label: "Dubai Office", deskCount: 100, canvasW: 1500, canvasH: 700, hidden: false },
+  { key: "dubai", label: "Dubai Office", deskCount: 113, canvasW: 1500, canvasH: 780, hidden: false },
   { key: "technomak", label: "Technomak", deskCount: 28, canvasW: 1100, canvasH: 600, hidden: false },
   { key: "drydocks", label: "Drydocks", deskCount: 18, canvasW: 900, canvasH: 500, hidden: false },
   { key: "fabtech", label: "Fabtech", deskCount: 8, canvasW: 700, canvasH: 450, hidden: false },
@@ -160,42 +162,56 @@ const DEFAULT_SITES = [
   { key: "hurstgra2", label: "Rig Hurstgra2", deskCount: 6, canvasW: 600, canvasH: 400, hidden: false },
 ];
 
-// Dubai zones recreated from the uploaded floor plan, now editable in-app
-// (draggable/resizable/renamable) rather than hardcoded geometry.
+// Dubai zones traced directly from the uploaded floor plan PDF — real room
+// labels and positions (cabin row, AP1–AP6 desk zones, store/pantry,
+// reception, conference, washrooms, right-side cabins, lounge).
 const DEFAULT_DUBAI_ZONES = [
-  { id: "finance", label: "Finance", type: "office", x: 20, y: 20, w: 150, h: 180 },
-  { id: "finmgr", label: "Finance Manager", type: "cabin", x: 20, y: 210, w: 150, h: 90 },
-  { id: "office-l1", label: "Office", type: "office", x: 20, y: 310, w: 150, h: 110 },
-  { id: "meeting", label: "Meeting Rm", type: "other", x: 20, y: 430, w: 300, h: 90 },
-  { id: "server", label: "Server", type: "server-room", x: 190, y: 150, w: 110, h: 150 },
-  { id: "office-t1", label: "Office", type: "office", x: 420, y: 20, w: 100, h: 110 },
-  { id: "office-t2", label: "Office", type: "office", x: 530, y: 20, w: 110, h: 110 },
-  { id: "office-t3", label: "Office", type: "office", x: 690, y: 20, w: 90, h: 110 },
-  { id: "office-t4", label: "Office", type: "office", x: 785, y: 20, w: 80, h: 110 },
-  { id: "office-t5", label: "Office", type: "office", x: 870, y: 20, w: 90, h: 110 },
-  { id: "office-t6", label: "Office", type: "office", x: 965, y: 20, w: 110, h: 110 },
-  { id: "office-t7", label: "Office", type: "office", x: 1080, y: 20, w: 90, h: 110 },
-  { id: "na", label: "NA", type: "other", x: 350, y: 350, w: 300, h: 150 },
-  { id: "office-c1", label: "Office", type: "office", x: 780, y: 360, w: 130, h: 120 },
-  { id: "office-c2", label: "Office", type: "office", x: 780, y: 490, w: 130, h: 120 },
-  { id: "office-cluster", label: "Office", type: "office", x: 990, y: 480, w: 190, h: 140 },
-  { id: "office-b1", label: "Office", type: "office", x: 320, y: 520, w: 320, h: 110 },
-  { id: "office-b2", label: "Office", type: "office", x: 650, y: 520, w: 120, h: 110 },
-  { id: "office-rr1", label: "Office", type: "office", x: 1200, y: 430, w: 120, h: 70 },
-  { id: "office-rr2", label: "Office", type: "office", x: 1330, y: 430, w: 120, h: 70 },
-  { id: "office-rr4", label: "Office", type: "office", x: 1200, y: 565, w: 250, h: 65 },
+  { id: "cabin-a", label: "Cabin", type: "office", x: 60, y: 22, w: 130, h: 118, doors: [] },
+  { id: "tel-1", label: "Tel booth", type: "other", x: 196, y: 22, w: 46, h: 78, doors: [] },
+  { id: "cabin-01", label: "Cabin 01", type: "office", x: 246, y: 22, w: 128, h: 118, doors: [] },
+  { id: "cabin-03", label: "Cabin 03", type: "office", x: 378, y: 22, w: 128, h: 118, doors: [] },
+  { id: "cabin-02", label: "Cabin 02", type: "office", x: 600, y: 22, w: 118, h: 118, doors: [] },
+  { id: "md-cabin", label: "MD cabin", type: "cabin", x: 722, y: 22, w: 128, h: 140, doors: [] },
+  { id: "left-cabin-1", label: "Cabin", type: "office", x: 26, y: 116, w: 90, h: 78, doors: [] },
+  { id: "left-tel", label: "Tel booth", type: "other", x: 26, y: 200, w: 90, h: 44, doors: [] },
+  { id: "left-cabin-2", label: "Cabin", type: "office", x: 26, y: 250, w: 90, h: 84, doors: [] },
+  { id: "storage", label: "Storage", type: "other", x: 104, y: 196, w: 18, h: 130, doors: [] },
+  { id: "ap2-store", label: "AP2 store", type: "other", x: 110, y: 340, w: 104, h: 68, doors: [] },
+  { id: "small-cabin-ap5", label: "Cabin", type: "office", x: 450, y: 196, w: 40, h: 92, doors: [] },
+  { id: "store", label: "Store", type: "other", x: 322, y: 330, w: 72, h: 122, doors: [] },
+  { id: "pantry", label: "Pantry", type: "other", x: 396, y: 330, w: 84, h: 122, doors: [{ wall: "S", pos: 0.5 }] },
+  { id: "pantry-room", label: "Pantry room", type: "other", x: 482, y: 330, w: 72, h: 104, doors: [] },
+  { id: "conference-1", label: "Conference", type: "other", x: 792, y: 208, w: 146, h: 124, doors: [{ wall: "S", pos: 0.3 }] },
+  { id: "reception-cabin", label: "Cabin", type: "office", x: 560, y: 556, w: 96, h: 70, doors: [] },
+  { id: "tel-room-right", label: "Tel room", type: "other", x: 1150, y: 352, w: 80, h: 56, doors: [] },
+  { id: "washrooms", label: "Washrooms", type: "other", x: 934, y: 352, w: 206, h: 140, doors: [] },
+  { id: "right-cabin-1", label: "Cabin", type: "office", x: 934, y: 500, w: 130, h: 110, doors: [] },
+  { id: "right-cabin-2", label: "Cabin", type: "office", x: 1074, y: 500, w: 150, h: 110, doors: [] },
+  { id: "conference-2", label: "Conference", type: "other", x: 1240, y: 60, w: 80, h: 420, doors: [{ wall: "W", pos: 0.5 }] },
+  { id: "lounge", label: "Lounge", type: "other", x: 1240, y: 486, w: 80, h: 110, doors: [] },
+  { id: "reception-area", label: "Reception area", type: "other", x: 240, y: 390, w: 384, h: 302, doors: [{ wall: "N", pos: 0.85 }, { wall: "S", pos: 0.2 }] },
 ];
 
-const DUBAI_DESK_SPOTS = [
-  { x: 40, y: 50, count: 8 }, { x: 40, y: 320, count: 1 }, { x: 40, y: 400, count: 3 },
-  { x: 210, y: 40, count: 8 }, { x: 210, y: 340, count: 6 }, { x: 330, y: 210, count: 8 },
-  { x: 430, y: 30, count: 2 }, { x: 540, y: 30, count: 4 }, { x: 700, y: 30, count: 1 },
-  { x: 795, y: 30, count: 1 }, { x: 880, y: 30, count: 1 }, { x: 975, y: 30, count: 2 },
-  { x: 1090, y: 30, count: 1 }, { x: 810, y: 170, count: 6 }, { x: 960, y: 240, count: 6 },
-  { x: 1190, y: 50, count: 6 }, { x: 1340, y: 50, count: 5 }, { x: 1190, y: 190, count: 6 },
-  { x: 1340, y: 190, count: 6 }, { x: 790, y: 370, count: 1 }, { x: 1000, y: 490, count: 8 },
-  { x: 330, y: 530, count: 8 }, { x: 660, y: 530, count: 1 }, { x: 1210, y: 440, count: 1 },
-  { x: 1340, y: 440, count: 1 }, { x: 1210, y: 575, count: 2 },
+// Desk-generating zones — bounding box + grid, matching the real desk
+// clusters visible in the floor plan (AP1–AP6, cabin row, open-plan area).
+const DUBAI_DESK_ZONES = [
+  { x: 64, y: 40, w: 116, h: 90, cols: 2, rows: 1 },   // top-left cabin, 2 desks
+  { x: 250, y: 40, w: 116, h: 90, cols: 1, rows: 1 },  // Cabin 01
+  { x: 382, y: 40, w: 116, h: 90, cols: 1, rows: 1 },  // Cabin 03
+  { x: 604, y: 44, w: 100, h: 84, cols: 1, rows: 1 },  // Cabin 02
+  { x: 726, y: 48, w: 110, h: 100, cols: 1, rows: 1 }, // MD cabin
+  { x: 30, y: 130, w: 78, h: 54, cols: 1, rows: 1 },   // left cabin desk
+  { x: 30, y: 266, w: 78, h: 54, cols: 1, rows: 1 },   // left cabin desk
+  { x: 130, y: 198, w: 158, h: 128, cols: 4, rows: 2 },// AP3 — 8 desks
+  { x: 304, y: 214, w: 172, h: 110, cols: 4, rows: 2 },// AP4 — 8 desks
+  { x: 496, y: 198, w: 138, h: 112, cols: 4, rows: 2 },// AP5 — 8 desks
+  { x: 460, y: 202, w: 30, h: 80, cols: 1, rows: 1 },  // small cabin desk near AP5
+  { x: 664, y: 198, w: 142, h: 96, cols: 5, rows: 2 }, // AP6 — 10 desks
+  { x: 28, y: 486, w: 208, h: 96, cols: 5, rows: 2 },  // AP1 — 10-seat bench
+  { x: 566, y: 566, w: 80, h: 50, cols: 2, rows: 1 },  // cabin near reception
+  { x: 858, y: 60, w: 378, h: 288, cols: 9, rows: 6 }, // big open-plan area — 54 desks
+  { x: 938, y: 504, w: 122, h: 96, cols: 2, rows: 1 }, // right cabin
+  { x: 1078, y: 504, w: 142, h: 96, cols: 2, rows: 1 },// right cabin
 ];
 
 const SAMPLE_NAMES = ["Ahmed R.", "Fatima K.", "Sana T.", "Omar J.", "Priya N.", "Vikram S.", "Layla H.", "Yusuf A.", "Meera P.", "Rashid M.", "Aisha B.", "Karan D."];
@@ -211,19 +227,30 @@ function makeDesk(site, num, x, y) {
     x: x ?? 40, y: y ?? 40, rot: 0,
     user: occupied ? SAMPLE_NAMES[Math.floor(Math.random() * SAMPLE_NAMES.length)] : null,
     status: noMonitor ? "unavailable" : occupied ? "occupied" : "available",
-    equipment: { monitors: noMonitor ? 0 : 2, dock: !noMonitor, keyboard: !noMonitor, mouse: !noMonitor, headset: Math.random() > 0.5, laptop: site === "dubai" && Math.random() > 0.7 },
+    equipment: {
+      monitors: noMonitor ? 0 : 2,
+      dock: !noMonitor, dockModel: "",
+      keyboard: !noMonitor, keyboardModel: "",
+      mouse: !noMonitor, mouseModel: "",
+      headset: Math.random() > 0.5, headsetModel: "",
+      laptop: site === "dubai" && Math.random() > 0.7, laptopModel: "",
+    },
     history: [{ ts: Date.now(), action: "Seeded", by: "System" }],
   };
 }
 
 function seedDubai() {
   const desks = []; let n = 1;
-  DUBAI_DESK_SPOTS.forEach((spot) => {
-    const perRow = 4;
-    for (let i = 0; i < spot.count; i++) {
-      const dx = spot.x + (i % perRow) * 44;
-      const dy = spot.y + Math.floor(i / perRow) * 50;
-      desks.push(makeDesk("dubai", n++, dx, dy));
+  const padX = 8, padY = 8, deskW = 26, deskH = 30;
+  DUBAI_DESK_ZONES.forEach((z) => {
+    const cellW = (z.w - padX * 2) / z.cols;
+    const cellH = (z.h - padY * 2) / z.rows;
+    for (let r = 0; r < z.rows; r++) {
+      for (let c = 0; c < z.cols; c++) {
+        const dx = Math.round(z.x + padX + c * cellW + (cellW - deskW) / 2);
+        const dy = Math.round(z.y + padY + r * cellH + (cellH - deskH) / 2);
+        desks.push(makeDesk("dubai", n++, dx, dy));
+      }
     }
   });
   return desks;
@@ -249,6 +276,7 @@ function seedZones(sites) {
   return z;
 }
 function seedAssets(sites) { const a = {}; sites.forEach((s) => { a[s.key] = []; }); return a; }
+function seedPOs(sites) { const p = {}; sites.forEach((s) => { p[s.key] = []; }); return p; }
 
 function emptyStock(siteKey) {
   const items = {};
@@ -285,11 +313,12 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
     onDragStart();
     const startX = e.clientX, startY = e.clientY;
     const origX = desk.x, origY = desk.y;
+    const maxX = (width || 1500) - 26, maxY = (height || 700) - 30;
     let moved = false;
     function onMove(ev) {
       const dx = ev.clientX - startX, dy = ev.clientY - startY;
       if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-      onMoveDesk(desk.id, Math.max(0, origX + dx), Math.max(0, origY + dy));
+      onMoveDesk(desk.id, Math.max(0, Math.min(maxX, origX + dx)), Math.max(0, Math.min(maxY, origY + dy)));
     }
     function onUp() {
       window.removeEventListener("pointermove", onMove);
@@ -306,10 +335,16 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
     onDragStart();
     const startX = e.clientX, startY = e.clientY;
     const orig = { x: zone.x, y: zone.y, w: zone.w, h: zone.h };
+    const cw = width || 1500, ch = height || 700;
     function onMove(ev) {
       const dx = ev.clientX - startX, dy = ev.clientY - startY;
-      if (mode === "move") onMoveZone(zone.id, Math.max(0, orig.x + dx), Math.max(0, orig.y + dy));
-      else onResizeZone(zone.id, Math.max(60, orig.w + dx), Math.max(40, orig.h + dy));
+      if (mode === "move") {
+        const maxX = cw - orig.w, maxY = ch - orig.h;
+        onMoveZone(zone.id, Math.max(0, Math.min(maxX, orig.x + dx)), Math.max(0, Math.min(maxY, orig.y + dy)));
+      } else {
+        const maxW = cw - orig.x, maxH = ch - orig.y;
+        onResizeZone(zone.id, Math.max(60, Math.min(maxW, orig.w + dx)), Math.max(40, Math.min(maxH, orig.h + dy)));
+      }
     }
     function onUp() {
       window.removeEventListener("pointermove", onMove);
@@ -320,7 +355,12 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
   }
 
   return (
-    <div className="relative" style={{ width: width || 1500, height: height || 700, touchAction: "none" }}>
+    <div className="relative rounded" style={{
+      width: width || 1500, height: height || 700, touchAction: "none",
+      background: C.card, border: `2px solid ${C.border}`,
+      backgroundImage: `linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`,
+      backgroundSize: "22px 22px",
+    }}>
       {zones.map((z) => {
         const zt = ZONE_TYPES[z.type] || ZONE_TYPES.other;
         const doors = z.doors || [];
@@ -678,6 +718,20 @@ function Floor3D({ desks, zones, onSelectDesk }) {
   );
 }
 
+function EquipRow({ icon: Icon, label, checked, model, disabled, onToggle, onModel }) {
+  return (
+    <div className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}>
+      <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: C.sub }} />
+      <label className="flex items-center gap-1.5 shrink-0">
+        <input type="checkbox" disabled={disabled} checked={checked} onChange={(e) => onToggle(e.target.checked)} /> {label}
+      </label>
+      {checked && (
+        <input disabled={disabled} defaultValue={model || ""} placeholder="Model (optional)" className="ml-auto w-28 rounded px-1.5 py-0.5 text-[11px]" style={{ border: `1px solid ${C.border}` }} onBlur={(e) => { if (e.target.value !== model) onModel(e.target.value); }} />
+      )}
+    </div>
+  );
+}
+
 function DeskDashboard() {
   const [tab, setTab] = useState("overview");
   const [siteView, setSiteView] = useState("floor");
@@ -685,6 +739,7 @@ function DeskDashboard() {
   const [desks, setDesks] = useState([]);
   const [zones, setZones] = useState({});
   const [assets, setAssets] = useState({});
+  const [purchaseOrders, setPurchaseOrders] = useState({});
   const [stock, setStock] = useState({});
   const [loading, setLoading] = useState(true);
   const [saveError, setSaveError] = useState(false);
@@ -703,37 +758,54 @@ function DeskDashboard() {
   const [newSiteCount, setNewSiteCount] = useState(10);
   const [newZoneType, setNewZoneType] = useState("office");
   const [assetForm, setAssetForm] = useState({ name: "", model: "", qty: 1, note: "" });
+  const [poForm, setPoForm] = useState({ poNumber: "", date: "", vendor: "", item: "", qty: 1, unitCost: "", note: "" });
   const [canUndo, setCanUndo] = useState(false);
   const fileInputRef = useRef(null);
   const undoStack = useRef([]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const [sRes, dRes, stRes, zRes, aRes] = await Promise.all([
-          window.storage.get("sites-v2", true).catch(() => null),
-          window.storage.get("desks-v6", true).catch(() => null),
-          window.storage.get("stock-v3", true).catch(() => null),
-          window.storage.get("zones-v1", true).catch(() => null),
-          window.storage.get("assets-v1", true).catch(() => null),
-        ]);
-        const ls = sRes?.value ? JSON.parse(sRes.value) : DEFAULT_SITES;
-        const ld = dRes?.value ? JSON.parse(dRes.value) : seedDesks(ls);
-        const lst = stRes?.value ? JSON.parse(stRes.value) : seedStock(ls);
-        const lz = zRes?.value ? JSON.parse(zRes.value) : seedZones(ls);
-        const la = aRes?.value ? JSON.parse(aRes.value) : seedAssets(ls);
-        setSites(ls); setDesks(ld); setStock(lst); setZones(lz); setAssets(la);
-        if (!sRes?.value) await window.storage.set("sites-v2", JSON.stringify(ls), true);
-        if (!dRes?.value) await window.storage.set("desks-v6", JSON.stringify(ld), true);
-        if (!stRes?.value) await window.storage.set("stock-v3", JSON.stringify(lst), true);
-        if (!zRes?.value) await window.storage.set("zones-v1", JSON.stringify(lz), true);
-        if (!aRes?.value) await window.storage.set("assets-v1", JSON.stringify(la), true);
-      } catch {
-        const s = DEFAULT_SITES;
-        setSites(s); setDesks(seedDesks(s)); setStock(seedStock(s)); setZones(seedZones(s)); setAssets(seedAssets(s));
-      } finally { setLoading(false); }
-    })();
-  }, []);
+  const [loadError, setLoadError] = useState(false);
+
+  async function loadAllData() {
+    setLoading(true);
+    setLoadError(false);
+    try {
+      // Deliberately NOT catching individual read errors here — if a read
+      // genuinely fails (network, permissions, etc), we must not treat that
+      // the same as "no data exists yet." A failed read throws and is
+      // handled below by showing an error, never by seeding/overwriting.
+      const [sRes, dRes, stRes, zRes, aRes, poRes] = await Promise.all([
+        window.storage.get("sites-v2", true),
+        window.storage.get("desks-v6", true),
+        window.storage.get("stock-v3", true),
+        window.storage.get("zones-v1", true),
+        window.storage.get("assets-v1", true),
+        window.storage.get("po-v1", true),
+      ]);
+      const ls = sRes?.value ? JSON.parse(sRes.value) : DEFAULT_SITES;
+      const ld = dRes?.value ? JSON.parse(dRes.value) : seedDesks(ls);
+      const lst = stRes?.value ? JSON.parse(stRes.value) : seedStock(ls);
+      const lz = zRes?.value ? JSON.parse(zRes.value) : seedZones(ls);
+      const la = aRes?.value ? JSON.parse(aRes.value) : seedAssets(ls);
+      const lpo = poRes?.value ? JSON.parse(poRes.value) : seedPOs(ls);
+      setSites(ls); setDesks(ld); setStock(lst); setZones(lz); setAssets(la); setPurchaseOrders(lpo);
+      // Only ever write a default back when the read genuinely succeeded
+      // AND came back completely empty (brand-new setup) — never on a
+      // failed/uncertain read.
+      if (sRes === null) await window.storage.set("sites-v2", JSON.stringify(ls), true);
+      if (dRes === null) await window.storage.set("desks-v6", JSON.stringify(ld), true);
+      if (stRes === null) await window.storage.set("stock-v3", JSON.stringify(lst), true);
+      if (zRes === null) await window.storage.set("zones-v1", JSON.stringify(lz), true);
+      if (aRes === null) await window.storage.set("assets-v1", JSON.stringify(la), true);
+      if (poRes === null) await window.storage.set("po-v1", JSON.stringify(lpo), true);
+    } catch (err) {
+      console.error("Failed to load saved data:", err);
+      // Do NOT seed or write anything here — an unreadable database must
+      // never be silently replaced with fresh demo data.
+      setLoadError(true);
+    } finally { setLoading(false); }
+  }
+
+  useEffect(() => { loadAllData(); }, []);
 
   const ADMIN_PASSWORD = "515085";
   function handleLogin() {
@@ -752,7 +824,7 @@ function DeskDashboard() {
     try { sessionStorage.removeItem("dt_admin"); } catch (e) {}
   }
 
-  function snapshot() { return { sites, desks, stock, zones, assets }; }
+  function snapshot() { return { sites, desks, stock, zones, assets, purchaseOrders }; }
   function pushUndo() {
     undoStack.current.push(snapshot());
     if (undoStack.current.length > 15) undoStack.current.shift();
@@ -762,13 +834,14 @@ function DeskDashboard() {
     const prev = undoStack.current.pop();
     if (!prev) return;
     setCanUndo(undoStack.current.length > 0);
-    persistAll(prev.sites, prev.desks, prev.stock, prev.zones, prev.assets);
+    persistAll(prev.sites, prev.desks, prev.stock, prev.zones, prev.assets, prev.purchaseOrders);
   }
 
-  async function persistAll(ns, nd, nst, nz, na) {
+  async function persistAll(ns, nd, nst, nz, na, npo) {
     setSites(ns); setDesks(nd); setStock(nst);
     if (nz) setZones(nz);
     if (na) setAssets(na);
+    if (npo) setPurchaseOrders(npo);
     try {
       const calls = [
         window.storage.set("sites-v2", JSON.stringify(ns), true),
@@ -777,6 +850,7 @@ function DeskDashboard() {
       ];
       if (nz) calls.push(window.storage.set("zones-v1", JSON.stringify(nz), true));
       if (na) calls.push(window.storage.set("assets-v1", JSON.stringify(na), true));
+      if (npo) calls.push(window.storage.set("po-v1", JSON.stringify(npo), true));
       const r = await Promise.all(calls);
       setSaveError(r.some((x) => !x));
     } catch { setSaveError(true); }
@@ -797,7 +871,9 @@ function DeskDashboard() {
   }
   function removeDesk(sk, id) {
     pushUndo();
-    const nd = desks.filter((d) => d.id !== id);
+    const remaining = desks.filter((d) => d.site === sk && d.id !== id).sort((a, b) => a.number - b.number);
+    const renumbered = remaining.map((d, i) => ({ ...d, number: i + 1 }));
+    const nd = desks.filter((d) => d.site !== sk).concat(renumbered);
     const ns = sites.map((s) => (s.key === sk ? { ...s, deskCount: Math.max(0, s.deskCount - 1) } : s));
     persistAll(ns, nd, stock, zones, assets);
     setSelected((c) => (c && c.id === id ? null : c));
@@ -808,10 +884,19 @@ function DeskDashboard() {
   }
   function updateSiteCount(key, nc) {
     pushUndo();
-    const cur = desks.filter((d) => d.site === key); let nd = desks;
+    const cur = desks.filter((d) => d.site === key).sort((a, b) => a.number - b.number); let nd = desks;
     if (nc > cur.length) { const spots = genericSpots(nc).slice(cur.length); nd = [...desks, ...Array.from({ length: nc - cur.length }, (_, i) => makeDesk(key, cur.length + i + 1, spots[i].x, spots[i].y))]; }
     else if (nc < cur.length) { const keep = new Set(cur.slice(0, nc).map((d) => d.id)); nd = desks.filter((d) => d.site !== key || keep.has(d.id)); }
     persistAll(sites.map((s) => (s.key === key ? { ...s, deskCount: nc } : s)), nd, stock, zones, assets);
+  }
+  function resetDubaiToFloorPlan() {
+    if (!confirm("Replace the current Dubai Office layout with the traced floor plan? This overwrites Dubai's current desks and spaces — Undo will bring it back if needed.")) return;
+    pushUndo();
+    const freshZones = DEFAULT_DUBAI_ZONES.map((z) => ({ ...z, doors: [...(z.doors || [])] }));
+    const freshDesks = seedDubai();
+    const nd = desks.filter((d) => d.site !== "dubai").concat(freshDesks);
+    const ns = sites.map((s) => (s.key === "dubai" ? { ...s, deskCount: freshDesks.length } : s));
+    persistAll(ns, nd, stock, { ...zones, dubai: freshZones }, assets, purchaseOrders);
   }
   function removeSite(key) {
     pushUndo();
@@ -899,6 +984,30 @@ function DeskDashboard() {
     persistAll(sites, desks, stock, zones, { ...assets, [sk]: (assets[sk] || []).filter((a) => a.id !== id) });
   }
 
+  // ---- Purchase orders, per site ----
+  function addPO(sk) {
+    if (!poForm.poNumber.trim() || !poForm.item.trim()) return;
+    pushUndo();
+    const list = purchaseOrders[sk] || [];
+    const entry = {
+      id: `po${Date.now()}`,
+      poNumber: poForm.poNumber.trim(),
+      date: poForm.date || new Date().toISOString().slice(0, 10),
+      vendor: poForm.vendor.trim(),
+      item: poForm.item.trim(),
+      qty: Math.max(1, Number(poForm.qty) || 1),
+      unitCost: poForm.unitCost === "" ? null : Number(poForm.unitCost),
+      note: poForm.note.trim(),
+      addedAt: Date.now(),
+    };
+    persistAll(sites, desks, stock, zones, assets, { ...purchaseOrders, [sk]: [...list, entry] });
+    setPoForm({ poNumber: poForm.poNumber, date: poForm.date, vendor: poForm.vendor, item: "", qty: 1, unitCost: "", note: "" });
+  }
+  function removePO(sk, id) {
+    pushUndo();
+    persistAll(sites, desks, stock, zones, assets, { ...purchaseOrders, [sk]: (purchaseOrders[sk] || []).filter((p) => p.id !== id) });
+  }
+
   // ---- Backup export / import ----
   function exportData() {
     const payload = { exportedAt: new Date().toISOString(), sites, desks, stock, zones, assets };
@@ -931,14 +1040,36 @@ function DeskDashboard() {
   const globalSummary = useMemo(() => siteSummary(desks.filter((d) => visibleSites.some((s) => s.key === d.site))), [desks, visibleSites]);
   const searchResults = useMemo(() => { if (!query.trim()) return []; const q = query.toLowerCase(); return desks.filter((d) => d.id.toLowerCase().includes(q) || String(d.number).includes(q) || (d.user && d.user.toLowerCase().includes(q))); }, [query, desks]);
   const canEdit = role === "admin";
-  const navTabs = [{ key: "overview", label: "Overview" }, ...visibleSites];
+  const navTabs = [{ key: "overview", label: "Overview" }, { key: "people", label: "People" }, ...visibleSites];
   const totalAssets = useMemo(() => Object.values(assets).reduce((s, list) => s + (list || []).reduce((ss, a) => ss + a.qty, 0), 0), [assets]);
 
+  const peopleDirectory = useMemo(() => {
+    const map = {};
+    desks.filter((d) => d.user && visibleSites.some((s) => s.key === d.site)).forEach((d) => {
+      if (!map[d.user]) map[d.user] = { name: d.user, entries: [] };
+      const site = visibleSites.find((s) => s.key === d.site);
+      map[d.user].entries.push({ siteLabel: site ? site.label : d.site, siteKey: d.site, number: d.number, equipment: d.equipment });
+    });
+    return Object.values(map).sort((a, b) => a.name.localeCompare(b.name));
+  }, [desks, visibleSites]);
+  const knownUserNames = useMemo(() => [...new Set(desks.filter((d) => d.user).map((d) => d.user))].sort(), [desks]);
+
   useEffect(() => {
-    if (tab !== "overview" && !visibleSites.some((s) => s.key === tab)) setTab("overview");
+    if (tab !== "overview" && tab !== "people" && !visibleSites.some((s) => s.key === tab)) setTab("overview");
   }, [visibleSites, tab]);
 
   if (loading) return <div className="flex min-h-screen items-center justify-center" style={{ background: C.bg, color: C.sub }}><Loader2 className="h-5 w-5 animate-spin" /></div>;
+
+  if (loadError) return (
+    <div className="flex min-h-screen items-center justify-center p-6" style={{ background: C.bg }}>
+      <div className="max-w-sm rounded-md p-5 text-center" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+        <AlertTriangle className="mx-auto mb-2 h-6 w-6" style={{ color: SEAT.occupied.color }} />
+        <p className="mb-1 text-sm font-semibold">Couldn't load your saved data</p>
+        <p className="mb-4 text-xs" style={{ color: C.sub }}>This is likely a connection or Firebase issue. Your saved data has <b>not</b> been changed or overwritten — nothing will be touched until this loads successfully. Check your connection and try again.</p>
+        <button onClick={loadAllData} className="rounded px-3 py-1.5 text-sm font-medium text-white" style={{ background: C.primary }}>Retry</button>
+      </div>
+    </div>
+  );
 
   const globalStock = {};
   PRESET_ITEMS.concat([{ key: "laptop", label: "Laptops" }]).forEach((item) => {
@@ -1000,11 +1131,12 @@ function DeskDashboard() {
 
         {tab === "overview" && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-6">
               <StatCard icon={Users} label="Total Desks" value={globalSummary.total} color="#605E5C" />
               <StatCard icon={CheckCircle2} label="Occupied" value={globalSummary.occupied} color={SEAT.occupied.color} />
               <StatCard icon={CheckCircle2} label="Available" value={globalSummary.available} color={SEAT.available.color} />
               <StatCard icon={XCircle} label="Unavailable" value={globalSummary.unavailable} color={SEAT.unavailable.color} />
+              <StatCard icon={Users} label="Unique users" value={peopleDirectory.length} color={C.primary} />
               <StatCard icon={Cable} label="Logged assets" value={totalAssets} color="#605E5C" />
             </div>
 
@@ -1040,6 +1172,47 @@ function DeskDashboard() {
           </div>
         )}
 
+        {tab === "people" && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <StatCard icon={Users} label="Total people" value={peopleDirectory.length} color="#605E5C" />
+              <StatCard icon={CheckCircle2} label="Single-site" value={peopleDirectory.filter((p) => new Set(p.entries.map((e) => e.siteKey)).size === 1).length} color={SEAT.available.color} />
+              <StatCard icon={TrendingUp} label="Multi-site" value={peopleDirectory.filter((p) => new Set(p.entries.map((e) => e.siteKey)).size > 1).length} color={C.primary} />
+            </div>
+            <div className="overflow-hidden rounded-md" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+              <table className="w-full text-sm">
+                <thead><tr style={{ borderBottom: `1px solid ${C.border}`, color: C.sub }} className="text-left text-xs"><th className="px-3 py-2">Name</th><th className="px-3 py-2">Sites & desks</th><th className="px-3 py-2">Personal gear</th></tr></thead>
+                <tbody>
+                  {peopleDirectory.length === 0 && <tr><td colSpan={3} className="px-3 py-6 text-center text-xs" style={{ color: C.sub }}>No desks assigned to anyone yet.</td></tr>}
+                  {peopleDirectory.map((p) => {
+                    const siteCount = new Set(p.entries.map((e) => e.siteKey)).size;
+                    return (
+                      <tr key={p.name} style={{ borderBottom: `1px solid ${C.border}` }}>
+                        <td className="px-3 py-2 font-medium align-top">
+                          {p.name}
+                          {siteCount > 1 && <span className="ml-1.5 rounded-full px-1.5 py-0.5 text-[9px] font-medium" style={{ background: "#EAF3FB", color: C.primary }}>multi-site</span>}
+                        </td>
+                        <td className="px-3 py-2 align-top" style={{ color: C.sub }}>
+                          {p.entries.map((e, i) => <div key={i}>{e.siteLabel} · Desk #{e.number}</div>)}
+                        </td>
+                        <td className="px-3 py-2 align-top text-xs" style={{ color: C.sub }}>
+                          {p.entries.map((e, i) => {
+                            const parts = [];
+                            if (e.equipment.mouse) parts.push("Mouse" + (e.equipment.mouseModel ? ` (${e.equipment.mouseModel})` : ""));
+                            if (e.equipment.headset) parts.push("Headset" + (e.equipment.headsetModel ? ` (${e.equipment.headsetModel})` : ""));
+                            if (e.equipment.laptop) parts.push("Laptop" + (e.equipment.laptopModel ? ` (${e.equipment.laptopModel})` : ""));
+                            return <div key={i}>{parts.length ? parts.join(", ") : "—"}</div>;
+                          })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {sites.map((s) => {
           if (tab !== s.key) return null;
           const siteDesks = desks.filter((d) => d.site === s.key);
@@ -1048,19 +1221,21 @@ function DeskDashboard() {
           const items = s.key === "dubai" ? PRESET_ITEMS.concat([{ key: "laptop", label: "Laptops", icon: Laptop }]) : PRESET_ITEMS;
           const siteZones = zones[s.key] || [];
           const siteAssets = assets[s.key] || [];
+          const sitePOs = purchaseOrders[s.key] || [];
 
           return (
             <div key={s.key}>
-              <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-5">
                 <StatCard icon={Users} label="Total" value={sum.total} color="#605E5C" />
                 <StatCard icon={CheckCircle2} label="Occupied" value={sum.occupied} color={SEAT.occupied.color} />
                 <StatCard icon={CheckCircle2} label="Available" value={sum.available} color={SEAT.available.color} />
                 <StatCard icon={XCircle} label="Unavailable" value={sum.unavailable} color={SEAT.unavailable.color} />
+                <StatCard icon={Users} label="Users" value={new Set(siteDesks.filter((d) => d.user).map((d) => d.user)).size} color={C.primary} />
               </div>
 
               <div className="mb-3 flex flex-wrap items-center gap-2 print:hidden">
                 <div className="flex flex-wrap gap-1 rounded-md p-1 w-fit" style={{ background: C.card, border: `1px solid ${C.border}` }}>
-                  {[{ k: "floor", l: "Floor Layout", i: LayoutGrid }, { k: "3d", l: "3D View", i: Box3dIcon }, { k: "list", l: "Desk List", i: List }, { k: "stock", l: "Stock", i: Boxes }, { k: "assets", l: "Assets", i: Package }].map((v) => (
+                  {[{ k: "floor", l: "Floor Layout", i: LayoutGrid }, { k: "3d", l: "3D View", i: Box3dIcon }, { k: "list", l: "Desk List", i: List }, { k: "stock", l: "Stock", i: Boxes }, { k: "assets", l: "Assets", i: Package }, { k: "po", l: "Purchase Orders", i: Receipt }, { k: "report", l: "Report", i: ClipboardList }].map((v) => (
                     <button key={v.k} onClick={() => setSiteView(v.k)} className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium" style={siteView === v.k ? { background: C.primary, color: "#fff" } : { color: C.sub }}><v.i className="h-3.5 w-3.5" /> {v.l}</button>
                   ))}
                 </div>
@@ -1087,7 +1262,7 @@ function DeskDashboard() {
                   <div className="mb-3 flex flex-wrap gap-3 text-xs print:hidden" style={{ color: C.sub }}>
                     {Object.entries(SEAT).map(([k, st]) => <div key={k} className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full" style={{ background: st.seat, opacity: st.dashed ? 0.6 : 1 }} /> {st.label}</div>)}
                   </div>
-                  <div className="relative overflow-auto rounded-lg" style={{ background: C.card, border: `1px solid ${C.border}`, height: 660, backgroundImage: `linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`, backgroundSize: "22px 22px" }}
+                  <div className="relative overflow-auto rounded-lg" style={{ background: C.card, border: `1px solid ${C.border}`, height: 660 }}
                     onPointerUp={() => { commitDeskPosition(); commitZones(); }}>
                     <FloorCanvas
                       desks={siteDesks}
@@ -1194,6 +1369,94 @@ function DeskDashboard() {
                   )}
                 </div>
               )}
+
+              {siteView === "po" && (
+                <div className="space-y-3">
+                  <div className="overflow-hidden rounded-md" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                    <table className="w-full text-sm">
+                      <thead><tr style={{ borderBottom: `1px solid ${C.border}`, color: C.sub }} className="text-left text-xs"><th className="px-3 py-2">PO Number</th><th className="px-3 py-2">Date</th><th className="px-3 py-2">Vendor</th><th className="px-3 py-2">Item</th><th className="px-3 py-2">Qty</th><th className="px-3 py-2">Unit cost</th><th className="px-3 py-2">Total</th><th className="px-3 py-2">Note</th><th className="px-3 py-2"></th></tr></thead>
+                      <tbody>
+                        {sitePOs.length === 0 && <tr><td colSpan={9} className="px-3 py-6 text-center text-xs" style={{ color: C.sub }}>No purchase orders logged for this site yet.</td></tr>}
+                        {[...sitePOs].sort((a, b) => (a.date < b.date ? 1 : -1)).map((p) => (
+                          <tr key={p.id} style={{ borderBottom: `1px solid ${C.border}` }}>
+                            <td className="px-3 py-2 font-medium">{p.poNumber}</td>
+                            <td className="px-3 py-2" style={{ color: C.sub }}>{p.date}</td>
+                            <td className="px-3 py-2" style={{ color: C.sub }}>{p.vendor || "—"}</td>
+                            <td className="px-3 py-2">{p.item}</td>
+                            <td className="px-3 py-2">{p.qty}</td>
+                            <td className="px-3 py-2" style={{ color: C.sub }}>{p.unitCost != null ? p.unitCost.toFixed(2) : "—"}</td>
+                            <td className="px-3 py-2 font-medium">{p.unitCost != null ? (p.unitCost * p.qty).toFixed(2) : "—"}</td>
+                            <td className="px-3 py-2" style={{ color: C.sub }}>{p.note || "—"}</td>
+                            <td className="px-3 py-2">{canEdit && <button onClick={() => removePO(s.key, p.id)} className="print:hidden"><Trash2 className="h-3.5 w-3.5" style={{ color: SEAT.occupied.color }} /></button>}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      {sitePOs.some((p) => p.unitCost != null) && (
+                        <tfoot><tr><td colSpan={6} className="px-3 py-2 text-right text-xs font-medium" style={{ color: C.sub }}>Total spent</td><td className="px-3 py-2 font-semibold" colSpan={3}>{sitePOs.reduce((s2, p) => s2 + (p.unitCost != null ? p.unitCost * p.qty : 0), 0).toFixed(2)}</td></tr></tfoot>
+                      )}
+                    </table>
+                  </div>
+                  {canEdit && (
+                    <div className="flex flex-wrap items-center gap-2 rounded-md p-3" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                      <input value={poForm.poNumber} onChange={(e) => setPoForm({ ...poForm, poNumber: e.target.value })} placeholder="PO number" className="w-28 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input type="date" value={poForm.date} onChange={(e) => setPoForm({ ...poForm, date: e.target.value })} className="w-36 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input value={poForm.vendor} onChange={(e) => setPoForm({ ...poForm, vendor: e.target.value })} placeholder="Vendor (optional)" className="w-32 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input value={poForm.item} onChange={(e) => setPoForm({ ...poForm, item: e.target.value })} placeholder="Item purchased" className="flex-1 min-w-[140px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input type="number" min={1} value={poForm.qty} onChange={(e) => setPoForm({ ...poForm, qty: e.target.value })} className="w-16 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} title="Quantity" />
+                      <input type="number" min={0} step="0.01" value={poForm.unitCost} onChange={(e) => setPoForm({ ...poForm, unitCost: e.target.value })} placeholder="Unit cost" className="w-24 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input value={poForm.note} onChange={(e) => setPoForm({ ...poForm, note: e.target.value })} placeholder="Note (optional)" className="flex-1 min-w-[120px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <button onClick={() => addPO(s.key)} className="flex items-center gap-1 rounded px-2.5 py-1.5 text-xs font-medium text-white" style={{ background: C.primary }}><Plus className="h-3.5 w-3.5" /> Add</button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {siteView === "report" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between print:hidden">
+                    <p className="text-xs" style={{ color: C.sub }}>A clean printable sheet for {s.label} — desk setup and user setup, side by side for manual verification.</p>
+                    <button onClick={() => window.print()} className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-white" style={{ background: C.primary }}><Printer className="h-3.5 w-3.5" /> Print / Save PDF</button>
+                  </div>
+
+                  <div>
+                    <h3 className="mb-2 text-sm font-semibold">{s.label} — Desk setup</h3>
+                    <table className="w-full text-xs" style={{ border: `1px solid ${C.border}` }}>
+                      <thead><tr style={{ background: C.grid }}><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Desk #</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>User</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Status</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Monitors</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Dock</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Keyboard</th></tr></thead>
+                      <tbody>
+                        {[...siteDesks].sort((a, b) => a.number - b.number).map((d) => (
+                          <tr key={d.id}>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.number}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.user || "—"}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{SEAT[d.status].label}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.monitors}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.dock ? (d.equipment.dockModel || "Yes") : "—"}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.keyboard ? (d.equipment.keyboardModel || "Yes") : "—"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div style={{ breakBefore: "page" }}>
+                    <h3 className="mb-2 text-sm font-semibold">{s.label} — User setup</h3>
+                    <table className="w-full text-xs" style={{ border: `1px solid ${C.border}` }}>
+                      <thead><tr style={{ background: C.grid }}><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>User</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Desk #</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Mouse</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Headset</th>{s.key === "dubai" && <th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Laptop</th>}</tr></thead>
+                      <tbody>
+                        {siteDesks.filter((d) => d.user).length === 0 && <tr><td colSpan={5} className="border px-2 py-3 text-center" style={{ borderColor: C.border, color: C.sub }}>No desks assigned to a user yet.</td></tr>}
+                        {[...siteDesks].filter((d) => d.user).sort((a, b) => a.user.localeCompare(b.user)).map((d) => (
+                          <tr key={d.id}>
+                            <td className="border px-2 py-1 font-medium" style={{ borderColor: C.border }}>{d.user}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.number}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.mouse ? (d.equipment.mouseModel || "Yes") : "—"}</td>
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.headset ? (d.equipment.headsetModel || "Yes") : "—"}</td>
+                            {s.key === "dubai" && <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.laptop ? (d.equipment.laptopModel || "Yes") : "—"}</td>}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
@@ -1204,24 +1467,38 @@ function DeskDashboard() {
               <div className="mb-3 flex items-center justify-between"><span className="text-sm font-semibold">Desk #{selected.number} <span style={{ color: C.sub, fontWeight: 400 }}>({selected.id})</span></span><button onClick={() => setSelected(null)} style={{ color: C.sub }}>✕</button></div>
               {!canEdit && <p className="mb-3 rounded px-2.5 py-1.5 text-[11px]" style={{ background: C.grid, color: C.sub }}>Read-only mode — switch to Admin to edit.</p>}
               <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Assigned user</label>
-              <input disabled={!canEdit} defaultValue={selected.user ?? ""} placeholder="Unassigned" className="mb-3 w-full rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} onBlur={(e) => { const v = e.target.value || null; if (v !== selected.user) updateDesk(selected.id, { user: v }, v ? `Assigned to ${v}` : "Unassigned"); }} />
+              <input disabled={!canEdit} defaultValue={selected.user ?? ""} placeholder="Unassigned" list="known-user-names" className="mb-3 w-full rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} onBlur={(e) => {
+                const v = e.target.value || null;
+                if (v !== selected.user) {
+                  updateDesk(selected.id, {
+                    user: v,
+                    equipment: { ...selected.equipment, laptop: false, laptopModel: "", headset: false, headsetModel: "", mouse: false, mouseModel: "" },
+                  }, v ? `Assigned to ${v} (personal gear cleared)` : "Unassigned (personal gear cleared)");
+                }
+              }} />
+              <datalist id="known-user-names">{knownUserNames.map((n) => <option key={n} value={n} />)}</datalist>
               <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Status</label>
               <select disabled={!canEdit} value={selected.status} className="mb-3 w-full rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} onChange={(e) => updateDesk(selected.id, { status: e.target.value }, `Status → ${SEAT[e.target.value].label}`)}>
                 {Object.entries(SEAT).map(([k, st]) => <option key={k} value={k}>{st.label}</option>)}
               </select>
-              <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Equipment</label>
-              <div className="mb-3 grid grid-cols-2 gap-2">
+
+              <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Desk gear <span className="font-normal" style={{ color: C.sub }}>— stays with the desk</span></label>
+              <div className="mb-3 space-y-1.5">
                 <div className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}>
-                  <Monitor className="h-3.5 w-3.5" style={{ color: C.sub }} />
-                  <select disabled={!canEdit} value={selected.equipment.monitors} className="w-full bg-transparent outline-none" onChange={(e) => { const m = Number(e.target.value); const p = { equipment: { ...selected.equipment, monitors: m } }; if (m === 0) p.status = "unavailable"; updateDesk(selected.id, p, `Monitors → ${m}`); }}>
+                  <Monitor className="h-3.5 w-3.5 shrink-0" style={{ color: C.sub }} />
+                  <select disabled={!canEdit} value={selected.equipment.monitors} className="bg-transparent outline-none" onChange={(e) => { const m = Number(e.target.value); const p = { equipment: { ...selected.equipment, monitors: m } }; if (m === 0) p.status = "unavailable"; updateDesk(selected.id, p, `Monitors → ${m}`); }}>
                     {[0, 1, 2, 3].map((n) => <option key={n} value={n}>{n} monitor{n !== 1 ? "s" : ""}</option>)}
                   </select>
                 </div>
-                <label className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}><HardDrive className="h-3.5 w-3.5" style={{ color: C.sub }} /><input type="checkbox" disabled={!canEdit} checked={selected.equipment.dock} onChange={(e) => updateDesk(selected.id, { equipment: { ...selected.equipment, dock: e.target.checked } }, `Dock ${e.target.checked ? "added" : "removed"}`)} /> Dock</label>
-                <label className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}><Keyboard className="h-3.5 w-3.5" style={{ color: C.sub }} /><input type="checkbox" disabled={!canEdit} checked={selected.equipment.keyboard} onChange={(e) => updateDesk(selected.id, { equipment: { ...selected.equipment, keyboard: e.target.checked } }, `Keyboard ${e.target.checked ? "added" : "removed"}`)} /> Keyboard</label>
-                <label className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}><Mouse className="h-3.5 w-3.5" style={{ color: C.sub }} /><input type="checkbox" disabled={!canEdit} checked={selected.equipment.mouse} onChange={(e) => updateDesk(selected.id, { equipment: { ...selected.equipment, mouse: e.target.checked } }, `Mouse ${e.target.checked ? "added" : "removed"}`)} /> Mouse</label>
-                <label className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}><Headphones className="h-3.5 w-3.5" style={{ color: C.sub }} /><input type="checkbox" disabled={!canEdit} checked={selected.equipment.headset} onChange={(e) => updateDesk(selected.id, { equipment: { ...selected.equipment, headset: e.target.checked } }, `Headset ${e.target.checked ? "added" : "removed"}`)} /> Headset</label>
-                {selected.site === "dubai" && <label className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}><Laptop className="h-3.5 w-3.5" style={{ color: C.sub }} /><input type="checkbox" disabled={!canEdit} checked={selected.equipment.laptop} onChange={(e) => updateDesk(selected.id, { equipment: { ...selected.equipment, laptop: e.target.checked } }, `Laptop ${e.target.checked ? "added" : "removed"}`)} /> Laptop</label>}
+                <EquipRow icon={HardDrive} label="Dock" disabled={!canEdit} checked={selected.equipment.dock} model={selected.equipment.dockModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, dock: v } }, `Dock ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, dockModel: v } })} />
+                <EquipRow icon={Keyboard} label="Keyboard" disabled={!canEdit} checked={selected.equipment.keyboard} model={selected.equipment.keyboardModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, keyboard: v } }, `Keyboard ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, keyboardModel: v } })} />
+              </div>
+
+              <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Personal gear <span className="font-normal" style={{ color: C.sub }}>— goes with the person, cleared when reassigned</span></label>
+              <div className="mb-3 space-y-1.5">
+                <EquipRow icon={Mouse} label="Mouse" disabled={!canEdit} checked={selected.equipment.mouse} model={selected.equipment.mouseModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, mouse: v } }, `Mouse ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, mouseModel: v } })} />
+                <EquipRow icon={Headphones} label="Headset" disabled={!canEdit} checked={selected.equipment.headset} model={selected.equipment.headsetModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, headset: v } }, `Headset ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, headsetModel: v } })} />
+                {selected.site === "dubai" && <EquipRow icon={Laptop} label="Laptop" disabled={!canEdit} checked={selected.equipment.laptop} model={selected.equipment.laptopModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, laptop: v } }, `Laptop ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, laptopModel: v } })} />}
               </div>
               <div className="mt-4 pt-3" style={{ borderTop: `1px solid ${C.border}` }}>
                 <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium" style={{ color: C.sub }}><History className="h-3.5 w-3.5" /> Recent activity</div>
@@ -1284,6 +1561,9 @@ function DeskDashboard() {
                         </div>
                       </div>
                       <p className="mt-1 text-[11px]" style={{ color: C.sub }}>{sum.occupied} occupied · {sum.available} available · {(zones[s.key] || []).length} spaces · {assetCount} logged assets</p>
+                      {s.key === "dubai" && (
+                        <button onClick={resetDubaiToFloorPlan} className="mt-1.5 rounded px-2 py-1 text-[11px] font-medium" style={{ border: `1px solid ${C.border}`, color: C.primary }}>Reset to traced floor plan</button>
+                      )}
                     </div>
                   );
                 })}
