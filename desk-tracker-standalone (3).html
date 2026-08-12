@@ -154,7 +154,7 @@ const PRESET_ITEMS = [
 ];
 
 const DEFAULT_SITES = [
-  { key: "dubai", label: "Dubai Office", deskCount: 100, canvasW: 1500, canvasH: 700, hidden: false },
+  { key: "dubai", label: "Dubai Office", deskCount: 113, canvasW: 1500, canvasH: 780, hidden: false },
   { key: "technomak", label: "Technomak", deskCount: 28, canvasW: 1100, canvasH: 600, hidden: false },
   { key: "drydocks", label: "Drydocks", deskCount: 18, canvasW: 900, canvasH: 500, hidden: false },
   { key: "fabtech", label: "Fabtech", deskCount: 8, canvasW: 700, canvasH: 450, hidden: false },
@@ -162,42 +162,56 @@ const DEFAULT_SITES = [
   { key: "hurstgra2", label: "Rig Hurstgra2", deskCount: 6, canvasW: 600, canvasH: 400, hidden: false },
 ];
 
-// Dubai zones recreated from the uploaded floor plan, now editable in-app
-// (draggable/resizable/renamable) rather than hardcoded geometry.
+// Dubai zones traced directly from the uploaded floor plan PDF — real room
+// labels and positions (cabin row, AP1–AP6 desk zones, store/pantry,
+// reception, conference, washrooms, right-side cabins, lounge).
 const DEFAULT_DUBAI_ZONES = [
-  { id: "finance", label: "Finance", type: "office", x: 20, y: 20, w: 150, h: 180 },
-  { id: "finmgr", label: "Finance Manager", type: "cabin", x: 20, y: 210, w: 150, h: 90 },
-  { id: "office-l1", label: "Office", type: "office", x: 20, y: 310, w: 150, h: 110 },
-  { id: "meeting", label: "Meeting Rm", type: "other", x: 20, y: 430, w: 300, h: 90 },
-  { id: "server", label: "Server", type: "server-room", x: 190, y: 150, w: 110, h: 150 },
-  { id: "office-t1", label: "Office", type: "office", x: 420, y: 20, w: 100, h: 110 },
-  { id: "office-t2", label: "Office", type: "office", x: 530, y: 20, w: 110, h: 110 },
-  { id: "office-t3", label: "Office", type: "office", x: 690, y: 20, w: 90, h: 110 },
-  { id: "office-t4", label: "Office", type: "office", x: 785, y: 20, w: 80, h: 110 },
-  { id: "office-t5", label: "Office", type: "office", x: 870, y: 20, w: 90, h: 110 },
-  { id: "office-t6", label: "Office", type: "office", x: 965, y: 20, w: 110, h: 110 },
-  { id: "office-t7", label: "Office", type: "office", x: 1080, y: 20, w: 90, h: 110 },
-  { id: "na", label: "NA", type: "other", x: 350, y: 350, w: 300, h: 150 },
-  { id: "office-c1", label: "Office", type: "office", x: 780, y: 360, w: 130, h: 120 },
-  { id: "office-c2", label: "Office", type: "office", x: 780, y: 490, w: 130, h: 120 },
-  { id: "office-cluster", label: "Office", type: "office", x: 990, y: 480, w: 190, h: 140 },
-  { id: "office-b1", label: "Office", type: "office", x: 320, y: 520, w: 320, h: 110 },
-  { id: "office-b2", label: "Office", type: "office", x: 650, y: 520, w: 120, h: 110 },
-  { id: "office-rr1", label: "Office", type: "office", x: 1200, y: 430, w: 120, h: 70 },
-  { id: "office-rr2", label: "Office", type: "office", x: 1330, y: 430, w: 120, h: 70 },
-  { id: "office-rr4", label: "Office", type: "office", x: 1200, y: 565, w: 250, h: 65 },
+  { id: "cabin-a", label: "Cabin", type: "office", x: 60, y: 22, w: 130, h: 118, doors: [] },
+  { id: "tel-1", label: "Tel booth", type: "other", x: 196, y: 22, w: 46, h: 78, doors: [] },
+  { id: "cabin-01", label: "Cabin 01", type: "office", x: 246, y: 22, w: 128, h: 118, doors: [] },
+  { id: "cabin-03", label: "Cabin 03", type: "office", x: 378, y: 22, w: 128, h: 118, doors: [] },
+  { id: "cabin-02", label: "Cabin 02", type: "office", x: 600, y: 22, w: 118, h: 118, doors: [] },
+  { id: "md-cabin", label: "MD cabin", type: "cabin", x: 722, y: 22, w: 128, h: 140, doors: [] },
+  { id: "left-cabin-1", label: "Cabin", type: "office", x: 26, y: 116, w: 90, h: 78, doors: [] },
+  { id: "left-tel", label: "Tel booth", type: "other", x: 26, y: 200, w: 90, h: 44, doors: [] },
+  { id: "left-cabin-2", label: "Cabin", type: "office", x: 26, y: 250, w: 90, h: 84, doors: [] },
+  { id: "storage", label: "Storage", type: "other", x: 104, y: 196, w: 18, h: 130, doors: [] },
+  { id: "ap2-store", label: "AP2 store", type: "other", x: 110, y: 340, w: 104, h: 68, doors: [] },
+  { id: "small-cabin-ap5", label: "Cabin", type: "office", x: 450, y: 196, w: 40, h: 92, doors: [] },
+  { id: "store", label: "Store", type: "other", x: 322, y: 330, w: 72, h: 122, doors: [] },
+  { id: "pantry", label: "Pantry", type: "other", x: 396, y: 330, w: 84, h: 122, doors: [{ wall: "S", pos: 0.5 }] },
+  { id: "pantry-room", label: "Pantry room", type: "other", x: 482, y: 330, w: 72, h: 104, doors: [] },
+  { id: "conference-1", label: "Conference", type: "other", x: 792, y: 208, w: 146, h: 124, doors: [{ wall: "S", pos: 0.3 }] },
+  { id: "reception-cabin", label: "Cabin", type: "office", x: 560, y: 556, w: 96, h: 70, doors: [] },
+  { id: "tel-room-right", label: "Tel room", type: "other", x: 1150, y: 352, w: 80, h: 56, doors: [] },
+  { id: "washrooms", label: "Washrooms", type: "other", x: 934, y: 352, w: 206, h: 140, doors: [] },
+  { id: "right-cabin-1", label: "Cabin", type: "office", x: 934, y: 500, w: 130, h: 110, doors: [] },
+  { id: "right-cabin-2", label: "Cabin", type: "office", x: 1074, y: 500, w: 150, h: 110, doors: [] },
+  { id: "conference-2", label: "Conference", type: "other", x: 1240, y: 60, w: 80, h: 420, doors: [{ wall: "W", pos: 0.5 }] },
+  { id: "lounge", label: "Lounge", type: "other", x: 1240, y: 486, w: 80, h: 110, doors: [] },
+  { id: "reception-area", label: "Reception area", type: "other", x: 240, y: 390, w: 384, h: 302, doors: [{ wall: "N", pos: 0.85 }, { wall: "S", pos: 0.2 }] },
 ];
 
-const DUBAI_DESK_SPOTS = [
-  { x: 40, y: 50, count: 8 }, { x: 40, y: 320, count: 1 }, { x: 40, y: 400, count: 3 },
-  { x: 210, y: 40, count: 8 }, { x: 210, y: 340, count: 6 }, { x: 330, y: 210, count: 8 },
-  { x: 430, y: 30, count: 2 }, { x: 540, y: 30, count: 4 }, { x: 700, y: 30, count: 1 },
-  { x: 795, y: 30, count: 1 }, { x: 880, y: 30, count: 1 }, { x: 975, y: 30, count: 2 },
-  { x: 1090, y: 30, count: 1 }, { x: 810, y: 170, count: 6 }, { x: 960, y: 240, count: 6 },
-  { x: 1190, y: 50, count: 6 }, { x: 1340, y: 50, count: 5 }, { x: 1190, y: 190, count: 6 },
-  { x: 1340, y: 190, count: 6 }, { x: 790, y: 370, count: 1 }, { x: 1000, y: 490, count: 8 },
-  { x: 330, y: 530, count: 8 }, { x: 660, y: 530, count: 1 }, { x: 1210, y: 440, count: 1 },
-  { x: 1340, y: 440, count: 1 }, { x: 1210, y: 575, count: 2 },
+// Desk-generating zones — bounding box + grid, matching the real desk
+// clusters visible in the floor plan (AP1–AP6, cabin row, open-plan area).
+const DUBAI_DESK_ZONES = [
+  { x: 64, y: 40, w: 116, h: 90, cols: 2, rows: 1 },   // top-left cabin, 2 desks
+  { x: 250, y: 40, w: 116, h: 90, cols: 1, rows: 1 },  // Cabin 01
+  { x: 382, y: 40, w: 116, h: 90, cols: 1, rows: 1 },  // Cabin 03
+  { x: 604, y: 44, w: 100, h: 84, cols: 1, rows: 1 },  // Cabin 02
+  { x: 726, y: 48, w: 110, h: 100, cols: 1, rows: 1 }, // MD cabin
+  { x: 30, y: 130, w: 78, h: 54, cols: 1, rows: 1 },   // left cabin desk
+  { x: 30, y: 266, w: 78, h: 54, cols: 1, rows: 1 },   // left cabin desk
+  { x: 130, y: 198, w: 158, h: 128, cols: 4, rows: 2 },// AP3 — 8 desks
+  { x: 304, y: 214, w: 172, h: 110, cols: 4, rows: 2 },// AP4 — 8 desks
+  { x: 496, y: 198, w: 138, h: 112, cols: 4, rows: 2 },// AP5 — 8 desks
+  { x: 460, y: 202, w: 30, h: 80, cols: 1, rows: 1 },  // small cabin desk near AP5
+  { x: 664, y: 198, w: 142, h: 96, cols: 5, rows: 2 }, // AP6 — 10 desks
+  { x: 28, y: 486, w: 208, h: 96, cols: 5, rows: 2 },  // AP1 — 10-seat bench
+  { x: 566, y: 566, w: 80, h: 50, cols: 2, rows: 1 },  // cabin near reception
+  { x: 858, y: 60, w: 378, h: 288, cols: 9, rows: 6 }, // big open-plan area — 54 desks
+  { x: 938, y: 504, w: 122, h: 96, cols: 2, rows: 1 }, // right cabin
+  { x: 1078, y: 504, w: 142, h: 96, cols: 2, rows: 1 },// right cabin
 ];
 
 const SAMPLE_NAMES = ["Ahmed R.", "Fatima K.", "Sana T.", "Omar J.", "Priya N.", "Vikram S.", "Layla H.", "Yusuf A.", "Meera P.", "Rashid M.", "Aisha B.", "Karan D."];
@@ -227,12 +241,16 @@ function makeDesk(site, num, x, y) {
 
 function seedDubai() {
   const desks = []; let n = 1;
-  DUBAI_DESK_SPOTS.forEach((spot) => {
-    const perRow = 4;
-    for (let i = 0; i < spot.count; i++) {
-      const dx = spot.x + (i % perRow) * 44;
-      const dy = spot.y + Math.floor(i / perRow) * 50;
-      desks.push(makeDesk("dubai", n++, dx, dy));
+  const padX = 8, padY = 8, deskW = 26, deskH = 30;
+  DUBAI_DESK_ZONES.forEach((z) => {
+    const cellW = (z.w - padX * 2) / z.cols;
+    const cellH = (z.h - padY * 2) / z.rows;
+    for (let r = 0; r < z.rows; r++) {
+      for (let c = 0; c < z.cols; c++) {
+        const dx = Math.round(z.x + padX + c * cellW + (cellW - deskW) / 2);
+        const dy = Math.round(z.y + padY + r * cellH + (cellH - deskH) / 2);
+        desks.push(makeDesk("dubai", n++, dx, dy));
+      }
     }
   });
   return desks;
@@ -330,7 +348,12 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
   }
 
   return (
-    <div className="relative" style={{ width: width || 1500, height: height || 700, touchAction: "none" }}>
+    <div className="relative rounded" style={{
+      width: width || 1500, height: height || 700, touchAction: "none",
+      background: C.card, border: `2px solid ${C.border}`,
+      backgroundImage: `linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`,
+      backgroundSize: "22px 22px",
+    }}>
       {zones.map((z) => {
         const zt = ZONE_TYPES[z.type] || ZONE_TYPES.other;
         const doors = z.doors || [];
@@ -859,6 +882,15 @@ function DeskDashboard() {
     else if (nc < cur.length) { const keep = new Set(cur.slice(0, nc).map((d) => d.id)); nd = desks.filter((d) => d.site !== key || keep.has(d.id)); }
     persistAll(sites.map((s) => (s.key === key ? { ...s, deskCount: nc } : s)), nd, stock, zones, assets);
   }
+  function resetDubaiToFloorPlan() {
+    if (!confirm("Replace the current Dubai Office layout with the traced floor plan? This overwrites Dubai's current desks and spaces — Undo will bring it back if needed.")) return;
+    pushUndo();
+    const freshZones = DEFAULT_DUBAI_ZONES.map((z) => ({ ...z, doors: [...(z.doors || [])] }));
+    const freshDesks = seedDubai();
+    const nd = desks.filter((d) => d.site !== "dubai").concat(freshDesks);
+    const ns = sites.map((s) => (s.key === "dubai" ? { ...s, deskCount: freshDesks.length } : s));
+    persistAll(ns, nd, stock, { ...zones, dubai: freshZones }, assets, purchaseOrders);
+  }
   function removeSite(key) {
     pushUndo();
     const nst = { ...stock }; delete nst[key];
@@ -1223,7 +1255,7 @@ function DeskDashboard() {
                   <div className="mb-3 flex flex-wrap gap-3 text-xs print:hidden" style={{ color: C.sub }}>
                     {Object.entries(SEAT).map(([k, st]) => <div key={k} className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full" style={{ background: st.seat, opacity: st.dashed ? 0.6 : 1 }} /> {st.label}</div>)}
                   </div>
-                  <div className="relative overflow-auto rounded-lg" style={{ background: C.card, border: `1px solid ${C.border}`, height: 660, backgroundImage: `linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`, backgroundSize: "22px 22px" }}
+                  <div className="relative overflow-auto rounded-lg" style={{ background: "#F4F3EE", border: `1px solid ${C.border}`, height: 660 }}
                     onPointerUp={() => { commitDeskPosition(); commitZones(); }}>
                     <FloorCanvas
                       desks={siteDesks}
@@ -1522,6 +1554,9 @@ function DeskDashboard() {
                         </div>
                       </div>
                       <p className="mt-1 text-[11px]" style={{ color: C.sub }}>{sum.occupied} occupied · {sum.available} available · {(zones[s.key] || []).length} spaces · {assetCount} logged assets</p>
+                      {s.key === "dubai" && (
+                        <button onClick={resetDubaiToFloorPlan} className="mt-1.5 rounded px-2 py-1 text-[11px] font-medium" style={{ border: `1px solid ${C.border}`, color: C.primary }}>Reset to traced floor plan</button>
+                      )}
                     </div>
                   );
                 })}
