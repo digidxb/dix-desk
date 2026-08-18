@@ -154,7 +154,7 @@ const PRESET_ITEMS = [
 ];
 
 const DEFAULT_SITES = [
-  { key: "dubai", label: "Dubai Office", deskCount: 100, canvasW: 1500, canvasH: 700, hidden: false },
+  { key: "dubai", label: "Dubai Office", deskCount: 113, canvasW: 1500, canvasH: 780, hidden: false },
   { key: "technomak", label: "Technomak", deskCount: 28, canvasW: 1100, canvasH: 600, hidden: false },
   { key: "drydocks", label: "Drydocks", deskCount: 18, canvasW: 900, canvasH: 500, hidden: false },
   { key: "fabtech", label: "Fabtech", deskCount: 8, canvasW: 700, canvasH: 450, hidden: false },
@@ -162,42 +162,56 @@ const DEFAULT_SITES = [
   { key: "hurstgra2", label: "Rig Hurstgra2", deskCount: 6, canvasW: 600, canvasH: 400, hidden: false },
 ];
 
-// Dubai zones recreated from the uploaded floor plan, now editable in-app
-// (draggable/resizable/renamable) rather than hardcoded geometry.
+// Dubai zones traced directly from the uploaded floor plan PDF — real room
+// labels and positions (cabin row, AP1–AP6 desk zones, store/pantry,
+// reception, conference, washrooms, right-side cabins, lounge).
 const DEFAULT_DUBAI_ZONES = [
-  { id: "finance", label: "Finance", type: "office", x: 20, y: 20, w: 150, h: 180 },
-  { id: "finmgr", label: "Finance Manager", type: "cabin", x: 20, y: 210, w: 150, h: 90 },
-  { id: "office-l1", label: "Office", type: "office", x: 20, y: 310, w: 150, h: 110 },
-  { id: "meeting", label: "Meeting Rm", type: "other", x: 20, y: 430, w: 300, h: 90 },
-  { id: "server", label: "Server", type: "server-room", x: 190, y: 150, w: 110, h: 150 },
-  { id: "office-t1", label: "Office", type: "office", x: 420, y: 20, w: 100, h: 110 },
-  { id: "office-t2", label: "Office", type: "office", x: 530, y: 20, w: 110, h: 110 },
-  { id: "office-t3", label: "Office", type: "office", x: 690, y: 20, w: 90, h: 110 },
-  { id: "office-t4", label: "Office", type: "office", x: 785, y: 20, w: 80, h: 110 },
-  { id: "office-t5", label: "Office", type: "office", x: 870, y: 20, w: 90, h: 110 },
-  { id: "office-t6", label: "Office", type: "office", x: 965, y: 20, w: 110, h: 110 },
-  { id: "office-t7", label: "Office", type: "office", x: 1080, y: 20, w: 90, h: 110 },
-  { id: "na", label: "NA", type: "other", x: 350, y: 350, w: 300, h: 150 },
-  { id: "office-c1", label: "Office", type: "office", x: 780, y: 360, w: 130, h: 120 },
-  { id: "office-c2", label: "Office", type: "office", x: 780, y: 490, w: 130, h: 120 },
-  { id: "office-cluster", label: "Office", type: "office", x: 990, y: 480, w: 190, h: 140 },
-  { id: "office-b1", label: "Office", type: "office", x: 320, y: 520, w: 320, h: 110 },
-  { id: "office-b2", label: "Office", type: "office", x: 650, y: 520, w: 120, h: 110 },
-  { id: "office-rr1", label: "Office", type: "office", x: 1200, y: 430, w: 120, h: 70 },
-  { id: "office-rr2", label: "Office", type: "office", x: 1330, y: 430, w: 120, h: 70 },
-  { id: "office-rr4", label: "Office", type: "office", x: 1200, y: 565, w: 250, h: 65 },
+  { id: "cabin-a", label: "Cabin", type: "office", x: 60, y: 22, w: 130, h: 118, doors: [] },
+  { id: "tel-1", label: "Tel booth", type: "other", x: 196, y: 22, w: 46, h: 78, doors: [] },
+  { id: "cabin-01", label: "Cabin 01", type: "office", x: 246, y: 22, w: 128, h: 118, doors: [] },
+  { id: "cabin-03", label: "Cabin 03", type: "office", x: 378, y: 22, w: 128, h: 118, doors: [] },
+  { id: "cabin-02", label: "Cabin 02", type: "office", x: 600, y: 22, w: 118, h: 118, doors: [] },
+  { id: "md-cabin", label: "MD cabin", type: "cabin", x: 722, y: 22, w: 128, h: 140, doors: [] },
+  { id: "left-cabin-1", label: "Cabin", type: "office", x: 26, y: 116, w: 90, h: 78, doors: [] },
+  { id: "left-tel", label: "Tel booth", type: "other", x: 26, y: 200, w: 90, h: 44, doors: [] },
+  { id: "left-cabin-2", label: "Cabin", type: "office", x: 26, y: 250, w: 90, h: 84, doors: [] },
+  { id: "storage", label: "Storage", type: "other", x: 104, y: 196, w: 18, h: 130, doors: [] },
+  { id: "ap2-store", label: "AP2 store", type: "other", x: 110, y: 340, w: 104, h: 68, doors: [] },
+  { id: "small-cabin-ap5", label: "Cabin", type: "office", x: 450, y: 196, w: 40, h: 92, doors: [] },
+  { id: "store", label: "Store", type: "other", x: 322, y: 330, w: 72, h: 122, doors: [] },
+  { id: "pantry", label: "Pantry", type: "other", x: 396, y: 330, w: 84, h: 122, doors: [{ wall: "S", pos: 0.5 }] },
+  { id: "pantry-room", label: "Pantry room", type: "other", x: 482, y: 330, w: 72, h: 104, doors: [] },
+  { id: "conference-1", label: "Conference", type: "other", x: 792, y: 208, w: 146, h: 124, doors: [{ wall: "S", pos: 0.3 }] },
+  { id: "reception-cabin", label: "Cabin", type: "office", x: 560, y: 556, w: 96, h: 70, doors: [] },
+  { id: "tel-room-right", label: "Tel room", type: "other", x: 1150, y: 352, w: 80, h: 56, doors: [] },
+  { id: "washrooms", label: "Washrooms", type: "other", x: 934, y: 352, w: 206, h: 140, doors: [] },
+  { id: "right-cabin-1", label: "Cabin", type: "office", x: 934, y: 500, w: 130, h: 110, doors: [] },
+  { id: "right-cabin-2", label: "Cabin", type: "office", x: 1074, y: 500, w: 150, h: 110, doors: [] },
+  { id: "conference-2", label: "Conference", type: "other", x: 1240, y: 60, w: 80, h: 420, doors: [{ wall: "W", pos: 0.5 }] },
+  { id: "lounge", label: "Lounge", type: "other", x: 1240, y: 486, w: 80, h: 110, doors: [] },
+  { id: "reception-area", label: "Reception area", type: "other", x: 240, y: 390, w: 384, h: 302, doors: [{ wall: "N", pos: 0.85 }, { wall: "S", pos: 0.2 }] },
 ];
 
-const DUBAI_DESK_SPOTS = [
-  { x: 40, y: 50, count: 8 }, { x: 40, y: 320, count: 1 }, { x: 40, y: 400, count: 3 },
-  { x: 210, y: 40, count: 8 }, { x: 210, y: 340, count: 6 }, { x: 330, y: 210, count: 8 },
-  { x: 430, y: 30, count: 2 }, { x: 540, y: 30, count: 4 }, { x: 700, y: 30, count: 1 },
-  { x: 795, y: 30, count: 1 }, { x: 880, y: 30, count: 1 }, { x: 975, y: 30, count: 2 },
-  { x: 1090, y: 30, count: 1 }, { x: 810, y: 170, count: 6 }, { x: 960, y: 240, count: 6 },
-  { x: 1190, y: 50, count: 6 }, { x: 1340, y: 50, count: 5 }, { x: 1190, y: 190, count: 6 },
-  { x: 1340, y: 190, count: 6 }, { x: 790, y: 370, count: 1 }, { x: 1000, y: 490, count: 8 },
-  { x: 330, y: 530, count: 8 }, { x: 660, y: 530, count: 1 }, { x: 1210, y: 440, count: 1 },
-  { x: 1340, y: 440, count: 1 }, { x: 1210, y: 575, count: 2 },
+// Desk-generating zones — bounding box + grid, matching the real desk
+// clusters visible in the floor plan (AP1–AP6, cabin row, open-plan area).
+const DUBAI_DESK_ZONES = [
+  { x: 64, y: 40, w: 116, h: 90, cols: 2, rows: 1 },   // top-left cabin, 2 desks
+  { x: 250, y: 40, w: 116, h: 90, cols: 1, rows: 1 },  // Cabin 01
+  { x: 382, y: 40, w: 116, h: 90, cols: 1, rows: 1 },  // Cabin 03
+  { x: 604, y: 44, w: 100, h: 84, cols: 1, rows: 1 },  // Cabin 02
+  { x: 726, y: 48, w: 110, h: 100, cols: 1, rows: 1 }, // MD cabin
+  { x: 30, y: 130, w: 78, h: 54, cols: 1, rows: 1 },   // left cabin desk
+  { x: 30, y: 266, w: 78, h: 54, cols: 1, rows: 1 },   // left cabin desk
+  { x: 130, y: 198, w: 158, h: 128, cols: 4, rows: 2 },// AP3 — 8 desks
+  { x: 304, y: 214, w: 172, h: 110, cols: 4, rows: 2 },// AP4 — 8 desks
+  { x: 496, y: 198, w: 138, h: 112, cols: 4, rows: 2 },// AP5 — 8 desks
+  { x: 460, y: 202, w: 30, h: 80, cols: 1, rows: 1 },  // small cabin desk near AP5
+  { x: 664, y: 198, w: 142, h: 96, cols: 5, rows: 2 }, // AP6 — 10 desks
+  { x: 28, y: 486, w: 208, h: 96, cols: 5, rows: 2 },  // AP1 — 10-seat bench
+  { x: 566, y: 566, w: 80, h: 50, cols: 2, rows: 1 },  // cabin near reception
+  { x: 858, y: 60, w: 378, h: 288, cols: 9, rows: 6 }, // big open-plan area — 54 desks
+  { x: 938, y: 504, w: 122, h: 96, cols: 2, rows: 1 }, // right cabin
+  { x: 1078, y: 504, w: 142, h: 96, cols: 2, rows: 1 },// right cabin
 ];
 
 const SAMPLE_NAMES = ["Ahmed R.", "Fatima K.", "Sana T.", "Omar J.", "Priya N.", "Vikram S.", "Layla H.", "Yusuf A.", "Meera P.", "Rashid M.", "Aisha B.", "Karan D."];
@@ -217,9 +231,9 @@ function makeDesk(site, num, x, y) {
       monitors: noMonitor ? 0 : 2,
       dock: !noMonitor, dockModel: "",
       keyboard: !noMonitor, keyboardModel: "",
-      mouse: !noMonitor, mouseModel: "",
-      headset: Math.random() > 0.5, headsetModel: "",
-      laptop: site === "dubai" && Math.random() > 0.7, laptopModel: "",
+      mouse: !noMonitor, mouseModel: "", mouseSerial: "",
+      headset: Math.random() > 0.5, headsetModel: "", headsetSerial: "",
+      laptop: Math.random() > 0.7, laptopModel: "", laptopSerial: "",
     },
     history: [{ ts: Date.now(), action: "Seeded", by: "System" }],
   };
@@ -227,12 +241,16 @@ function makeDesk(site, num, x, y) {
 
 function seedDubai() {
   const desks = []; let n = 1;
-  DUBAI_DESK_SPOTS.forEach((spot) => {
-    const perRow = 4;
-    for (let i = 0; i < spot.count; i++) {
-      const dx = spot.x + (i % perRow) * 44;
-      const dy = spot.y + Math.floor(i / perRow) * 50;
-      desks.push(makeDesk("dubai", n++, dx, dy));
+  const padX = 8, padY = 8, deskW = 26, deskH = 30;
+  DUBAI_DESK_ZONES.forEach((z) => {
+    const cellW = (z.w - padX * 2) / z.cols;
+    const cellH = (z.h - padY * 2) / z.rows;
+    for (let r = 0; r < z.rows; r++) {
+      for (let c = 0; c < z.cols; c++) {
+        const dx = Math.round(z.x + padX + c * cellW + (cellW - deskW) / 2);
+        const dy = Math.round(z.y + padY + r * cellH + (cellH - deskH) / 2);
+        desks.push(makeDesk("dubai", n++, dx, dy));
+      }
     }
   });
   return desks;
@@ -259,11 +277,15 @@ function seedZones(sites) {
 }
 function seedAssets(sites) { const a = {}; sites.forEach((s) => { a[s.key] = []; }); return a; }
 function seedPOs(sites) { const p = {}; sites.forEach((s) => { p[s.key] = []; }); return p; }
+function seedInventory(sites) { const i = {}; sites.forEach((s) => { i[s.key] = []; }); return i; }
+function seedHomeItems(sites) { const h = {}; sites.forEach((s) => { h[s.key] = []; }); return h; }
+
+const ITEM_CATEGORIES = ["Laptop", "Monitor", "Headphone", "Keyboard", "Mouse", "Charger", "Speaker", "Hard disk / SSD", "Other"];
 
 function emptyStock(siteKey) {
   const items = {};
   PRESET_ITEMS.forEach((i) => { items[i.key] = { spare: 0 }; });
-  if (siteKey === "dubai") items.laptop = { spare: 0 };
+  items.laptop = { spare: 0 };
   return { spares: items, custom: [] };
 }
 function seedStock(sites) { const o = {}; sites.forEach((s) => { o[s.key] = emptyStock(s.key); }); return o; }
@@ -295,11 +317,12 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
     onDragStart();
     const startX = e.clientX, startY = e.clientY;
     const origX = desk.x, origY = desk.y;
+    const maxX = (width || 1500) - 26, maxY = (height || 700) - 30;
     let moved = false;
     function onMove(ev) {
       const dx = ev.clientX - startX, dy = ev.clientY - startY;
       if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-      onMoveDesk(desk.id, Math.max(0, origX + dx), Math.max(0, origY + dy));
+      onMoveDesk(desk.id, Math.max(0, Math.min(maxX, origX + dx)), Math.max(0, Math.min(maxY, origY + dy)));
     }
     function onUp() {
       window.removeEventListener("pointermove", onMove);
@@ -316,10 +339,16 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
     onDragStart();
     const startX = e.clientX, startY = e.clientY;
     const orig = { x: zone.x, y: zone.y, w: zone.w, h: zone.h };
+    const cw = width || 1500, ch = height || 700;
     function onMove(ev) {
       const dx = ev.clientX - startX, dy = ev.clientY - startY;
-      if (mode === "move") onMoveZone(zone.id, Math.max(0, orig.x + dx), Math.max(0, orig.y + dy));
-      else onResizeZone(zone.id, Math.max(60, orig.w + dx), Math.max(40, orig.h + dy));
+      if (mode === "move") {
+        const maxX = cw - orig.w, maxY = ch - orig.h;
+        onMoveZone(zone.id, Math.max(0, Math.min(maxX, orig.x + dx)), Math.max(0, Math.min(maxY, orig.y + dy)));
+      } else {
+        const maxW = cw - orig.x, maxH = ch - orig.y;
+        onResizeZone(zone.id, Math.max(60, Math.min(maxW, orig.w + dx)), Math.max(40, Math.min(maxH, orig.h + dy)));
+      }
     }
     function onUp() {
       window.removeEventListener("pointermove", onMove);
@@ -330,7 +359,12 @@ function FloorCanvas({ desks, zones, canEdit, width, height, onDragStart, onMove
   }
 
   return (
-    <div className="relative" style={{ width: width || 1500, height: height || 700, touchAction: "none" }}>
+    <div className="relative rounded" style={{
+      width: width || 1500, height: height || 700, touchAction: "none",
+      background: C.card, border: `2px solid ${C.border}`,
+      backgroundImage: `linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`,
+      backgroundSize: "22px 22px",
+    }}>
       {zones.map((z) => {
         const zt = ZONE_TYPES[z.type] || ZONE_TYPES.other;
         const doors = z.doors || [];
@@ -688,15 +722,26 @@ function Floor3D({ desks, zones, onSelectDesk }) {
   );
 }
 
-function EquipRow({ icon: Icon, label, checked, model, disabled, onToggle, onModel }) {
+function EquipRow({ icon: Icon, label, checked, model, disabled, onToggle, onModel, serial, availableSerials, onSerial }) {
   return (
-    <div className="flex items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}>
+    <div className="flex flex-wrap items-center gap-2 rounded px-2.5 py-1.5 text-xs" style={{ border: `1px solid ${C.border}` }}>
       <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: C.sub }} />
       <label className="flex items-center gap-1.5 shrink-0">
         <input type="checkbox" disabled={disabled} checked={checked} onChange={(e) => onToggle(e.target.checked)} /> {label}
       </label>
       {checked && (
-        <input disabled={disabled} defaultValue={model || ""} placeholder="Model (optional)" className="ml-auto w-28 rounded px-1.5 py-0.5 text-[11px]" style={{ border: `1px solid ${C.border}` }} onBlur={(e) => { if (e.target.value !== model) onModel(e.target.value); }} />
+        <>
+          <input disabled={disabled} defaultValue={model || ""} placeholder="Model (optional)" className="ml-auto w-28 rounded px-1.5 py-0.5 text-[11px]" style={{ border: `1px solid ${C.border}` }} onBlur={(e) => { if (e.target.value !== model) onModel(e.target.value); }} />
+          {onSerial && (availableSerials && availableSerials.length > 0 ? (
+            <select disabled={disabled} value={serial || ""} onChange={(e) => onSerial(e.target.value)} className="w-28 rounded px-1.5 py-0.5 text-[11px]" style={{ border: `1px solid ${C.border}` }}>
+              <option value="">No serial</option>
+              {serial && !availableSerials.includes(serial) && <option value={serial}>SN {serial} (assigned)</option>}
+              {availableSerials.map((sn) => <option key={sn} value={sn}>SN {sn}</option>)}
+            </select>
+          ) : serial ? (
+            <span className="w-28 rounded px-1.5 py-0.5 text-[11px]" style={{ border: `1px solid ${C.border}`, color: C.sub }}>SN {serial}</span>
+          ) : null)}
+        </>
       )}
     </div>
   );
@@ -710,11 +755,16 @@ function DeskDashboard() {
   const [zones, setZones] = useState({});
   const [assets, setAssets] = useState({});
   const [purchaseOrders, setPurchaseOrders] = useState({});
+  const [inventory, setInventory] = useState({});
+  const [homeItems, setHomeItems] = useState({});
   const [stock, setStock] = useState({});
   const [loading, setLoading] = useState(true);
   const [saveError, setSaveError] = useState(false);
   const [selected, setSelected] = useState(null);
   const [zoneEdit, setZoneEdit] = useState(null);
+  const [lookupUser, setLookupUser] = useState("");
+  const [editingHomeItem, setEditingHomeItem] = useState(null);
+  const [editHomeForm, setEditHomeForm] = useState(null);
   const [query, setQuery] = useState("");
   const [role, setRole] = useState(() => {
     if (!window.dtFirebaseEnabled) return "admin";
@@ -728,41 +778,63 @@ function DeskDashboard() {
   const [newSiteCount, setNewSiteCount] = useState(10);
   const [newZoneType, setNewZoneType] = useState("office");
   const [assetForm, setAssetForm] = useState({ name: "", model: "", qty: 1, note: "" });
-  const [poForm, setPoForm] = useState({ poNumber: "", date: "", vendor: "", item: "", qty: 1, unitCost: "", note: "" });
+  const [poForm, setPoForm] = useState({ poNumber: "", date: "", vendor: "", category: ITEM_CATEGORIES[0], item: "", qty: 1, unitCost: "", note: "", serials: "" });
+  const [extraItemForm, setExtraItemForm] = useState({ category: ITEM_CATEGORIES[0], model: "", qty: 1, serial: "" });
+  const [invForm, setInvForm] = useState({ category: ITEM_CATEGORIES[0], model: "", purchased: 0, serials: "" });
+  const [homeItemForm, setHomeItemForm] = useState({ person: "", category: ITEM_CATEGORIES[0], model: "", qty: 1, serial: "", note: "", date: "" });
   const [canUndo, setCanUndo] = useState(false);
   const fileInputRef = useRef(null);
   const undoStack = useRef([]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const [sRes, dRes, stRes, zRes, aRes, poRes] = await Promise.all([
-          window.storage.get("sites-v2", true).catch(() => null),
-          window.storage.get("desks-v6", true).catch(() => null),
-          window.storage.get("stock-v3", true).catch(() => null),
-          window.storage.get("zones-v1", true).catch(() => null),
-          window.storage.get("assets-v1", true).catch(() => null),
-          window.storage.get("po-v1", true).catch(() => null),
-        ]);
-        const ls = sRes?.value ? JSON.parse(sRes.value) : DEFAULT_SITES;
-        const ld = dRes?.value ? JSON.parse(dRes.value) : seedDesks(ls);
-        const lst = stRes?.value ? JSON.parse(stRes.value) : seedStock(ls);
-        const lz = zRes?.value ? JSON.parse(zRes.value) : seedZones(ls);
-        const la = aRes?.value ? JSON.parse(aRes.value) : seedAssets(ls);
-        const lpo = poRes?.value ? JSON.parse(poRes.value) : seedPOs(ls);
-        setSites(ls); setDesks(ld); setStock(lst); setZones(lz); setAssets(la); setPurchaseOrders(lpo);
-        if (!sRes?.value) await window.storage.set("sites-v2", JSON.stringify(ls), true);
-        if (!dRes?.value) await window.storage.set("desks-v6", JSON.stringify(ld), true);
-        if (!stRes?.value) await window.storage.set("stock-v3", JSON.stringify(lst), true);
-        if (!zRes?.value) await window.storage.set("zones-v1", JSON.stringify(lz), true);
-        if (!aRes?.value) await window.storage.set("assets-v1", JSON.stringify(la), true);
-        if (!poRes?.value) await window.storage.set("po-v1", JSON.stringify(lpo), true);
-      } catch {
-        const s = DEFAULT_SITES;
-        setSites(s); setDesks(seedDesks(s)); setStock(seedStock(s)); setZones(seedZones(s)); setAssets(seedAssets(s)); setPurchaseOrders(seedPOs(s));
-      } finally { setLoading(false); }
-    })();
-  }, []);
+  const [loadError, setLoadError] = useState(false);
+
+  async function loadAllData() {
+    setLoading(true);
+    setLoadError(false);
+    try {
+      // Deliberately NOT catching individual read errors here — if a read
+      // genuinely fails (network, permissions, etc), we must not treat that
+      // the same as "no data exists yet." A failed read throws and is
+      // handled below by showing an error, never by seeding/overwriting.
+      const [sRes, dRes, stRes, zRes, aRes, poRes, invRes, hiRes] = await Promise.all([
+        window.storage.get("sites-v2", true),
+        window.storage.get("desks-v6", true),
+        window.storage.get("stock-v3", true),
+        window.storage.get("zones-v1", true),
+        window.storage.get("assets-v1", true),
+        window.storage.get("po-v1", true),
+        window.storage.get("inventory-v1", true),
+        window.storage.get("home-items-v1", true),
+      ]);
+      const ls = sRes?.value ? JSON.parse(sRes.value) : DEFAULT_SITES;
+      const ld = dRes?.value ? JSON.parse(dRes.value) : seedDesks(ls);
+      const lst = stRes?.value ? JSON.parse(stRes.value) : seedStock(ls);
+      const lz = zRes?.value ? JSON.parse(zRes.value) : seedZones(ls);
+      const la = aRes?.value ? JSON.parse(aRes.value) : seedAssets(ls);
+      const lpo = poRes?.value ? JSON.parse(poRes.value) : seedPOs(ls);
+      const linv = invRes?.value ? JSON.parse(invRes.value) : seedInventory(ls);
+      const lhi = hiRes?.value ? JSON.parse(hiRes.value) : seedHomeItems(ls);
+      setSites(ls); setDesks(ld); setStock(lst); setZones(lz); setAssets(la); setPurchaseOrders(lpo); setInventory(linv); setHomeItems(lhi);
+      // Only ever write a default back when the read genuinely succeeded
+      // AND came back completely empty (brand-new setup) — never on a
+      // failed/uncertain read.
+      if (sRes === null) await window.storage.set("sites-v2", JSON.stringify(ls), true);
+      if (dRes === null) await window.storage.set("desks-v6", JSON.stringify(ld), true);
+      if (stRes === null) await window.storage.set("stock-v3", JSON.stringify(lst), true);
+      if (zRes === null) await window.storage.set("zones-v1", JSON.stringify(lz), true);
+      if (aRes === null) await window.storage.set("assets-v1", JSON.stringify(la), true);
+      if (poRes === null) await window.storage.set("po-v1", JSON.stringify(lpo), true);
+      if (invRes === null) await window.storage.set("inventory-v1", JSON.stringify(linv), true);
+      if (hiRes === null) await window.storage.set("home-items-v1", JSON.stringify(lhi), true);
+    } catch (err) {
+      console.error("Failed to load saved data:", err);
+      // Do NOT seed or write anything here — an unreadable database must
+      // never be silently replaced with fresh demo data.
+      setLoadError(true);
+    } finally { setLoading(false); }
+  }
+
+  useEffect(() => { loadAllData(); }, []);
 
   const ADMIN_PASSWORD = "515085";
   function handleLogin() {
@@ -781,7 +853,7 @@ function DeskDashboard() {
     try { sessionStorage.removeItem("dt_admin"); } catch (e) {}
   }
 
-  function snapshot() { return { sites, desks, stock, zones, assets, purchaseOrders }; }
+  function snapshot() { return { sites, desks, stock, zones, assets, purchaseOrders, inventory, homeItems }; }
   function pushUndo() {
     undoStack.current.push(snapshot());
     if (undoStack.current.length > 15) undoStack.current.shift();
@@ -791,14 +863,16 @@ function DeskDashboard() {
     const prev = undoStack.current.pop();
     if (!prev) return;
     setCanUndo(undoStack.current.length > 0);
-    persistAll(prev.sites, prev.desks, prev.stock, prev.zones, prev.assets, prev.purchaseOrders);
+    persistAll(prev.sites, prev.desks, prev.stock, prev.zones, prev.assets, prev.purchaseOrders, prev.inventory, prev.homeItems);
   }
 
-  async function persistAll(ns, nd, nst, nz, na, npo) {
+  async function persistAll(ns, nd, nst, nz, na, npo, ninv, nhi) {
     setSites(ns); setDesks(nd); setStock(nst);
     if (nz) setZones(nz);
     if (na) setAssets(na);
     if (npo) setPurchaseOrders(npo);
+    if (ninv) setInventory(ninv);
+    if (nhi) setHomeItems(nhi);
     try {
       const calls = [
         window.storage.set("sites-v2", JSON.stringify(ns), true),
@@ -808,6 +882,8 @@ function DeskDashboard() {
       if (nz) calls.push(window.storage.set("zones-v1", JSON.stringify(nz), true));
       if (na) calls.push(window.storage.set("assets-v1", JSON.stringify(na), true));
       if (npo) calls.push(window.storage.set("po-v1", JSON.stringify(npo), true));
+      if (ninv) calls.push(window.storage.set("inventory-v1", JSON.stringify(ninv), true));
+      if (nhi) calls.push(window.storage.set("home-items-v1", JSON.stringify(nhi), true));
       const r = await Promise.all(calls);
       setSaveError(r.some((x) => !x));
     } catch { setSaveError(true); }
@@ -845,6 +921,15 @@ function DeskDashboard() {
     if (nc > cur.length) { const spots = genericSpots(nc).slice(cur.length); nd = [...desks, ...Array.from({ length: nc - cur.length }, (_, i) => makeDesk(key, cur.length + i + 1, spots[i].x, spots[i].y))]; }
     else if (nc < cur.length) { const keep = new Set(cur.slice(0, nc).map((d) => d.id)); nd = desks.filter((d) => d.site !== key || keep.has(d.id)); }
     persistAll(sites.map((s) => (s.key === key ? { ...s, deskCount: nc } : s)), nd, stock, zones, assets);
+  }
+  function resetDubaiToFloorPlan() {
+    if (!confirm("Replace the current Dubai Office layout with the traced floor plan? This overwrites Dubai's current desks and spaces — Undo will bring it back if needed.")) return;
+    pushUndo();
+    const freshZones = DEFAULT_DUBAI_ZONES.map((z) => ({ ...z, doors: [...(z.doors || [])] }));
+    const freshDesks = seedDubai();
+    const nd = desks.filter((d) => d.site !== "dubai").concat(freshDesks);
+    const ns = sites.map((s) => (s.key === "dubai" ? { ...s, deskCount: freshDesks.length } : s));
+    persistAll(ns, nd, stock, { ...zones, dubai: freshZones }, assets, purchaseOrders);
   }
   function removeSite(key) {
     pushUndo();
@@ -933,23 +1018,264 @@ function DeskDashboard() {
   }
 
   // ---- Purchase orders, per site ----
+  // ---- Inventory: purchased/distributed counts per item type, with optional per-unit serial numbers ----
+  function findOrCreateInvItem(list, category, model) {
+    const key = (m) => m.trim().toLowerCase();
+    const existing = list.find((i) => i.category === category && key(i.model) === key(model));
+    if (existing) return { list, item: existing };
+    const created = { id: `inv${Date.now()}${Math.random().toString(36).slice(2, 6)}`, category, model: model.trim(), purchased: 0, distributed: 0, serials: [] };
+    return { list: [...list, created], item: created };
+  }
+  function parseSerials(text) {
+    return (text || "").split(/[,\n]/).map((s) => s.trim()).filter(Boolean);
+  }
+  function upsertInventoryPurchase(sk, category, model, qty, serialsText) {
+    if (!model.trim()) return;
+    const list = inventory[sk] || [];
+    const { list: withItem, item } = findOrCreateInvItem(list, category, model);
+    const newSerials = parseSerials(serialsText);
+    const updated = withItem.map((i) => (i.id === item.id ? { ...i, purchased: i.purchased + qty, serials: [...(i.serials || []), ...newSerials] } : i));
+    return { ...inventory, [sk]: updated };
+  }
+  function addInventoryItem(sk) {
+    if (!invForm.model.trim()) return;
+    pushUndo();
+    const list = inventory[sk] || [];
+    const { list: withItem, item } = findOrCreateInvItem(list, invForm.category, invForm.model);
+    const newSerials = parseSerials(invForm.serials);
+    const updated = withItem.map((i) => (i.id === item.id ? { ...i, purchased: i.purchased + Math.max(0, Number(invForm.purchased) || 0), serials: [...(i.serials || []), ...newSerials] } : i));
+    persistAll(sites, desks, stock, zones, assets, purchaseOrders, { ...inventory, [sk]: updated });
+    setInvForm({ category: invForm.category, model: "", purchased: 0, serials: "" });
+  }
+  function removeInventoryItem(sk, id) {
+    pushUndo();
+    persistAll(sites, desks, stock, zones, assets, purchaseOrders, { ...inventory, [sk]: (inventory[sk] || []).filter((i) => i.id !== id) });
+  }
+  function removeInventorySerial(sk, itemId, serial) {
+    pushUndo();
+    const list = inventory[sk] || [];
+    const updated = list.map((i) => (i.id === itemId ? { ...i, serials: (i.serials || []).filter((s) => s !== serial) } : i));
+    persistAll(sites, desks, stock, zones, assets, purchaseOrders, { ...inventory, [sk]: updated });
+  }
+
+  // ---- Extra items given to a person/desk (chargers, extra mouse, SSDs, speakers, etc) ----
+  function addExtraItem(deskId, sk) {
+    if (!extraItemForm.model.trim()) return;
+    pushUndo();
+    const list = inventory[sk] || [];
+    const { list: withItem, item } = findOrCreateInvItem(list, extraItemForm.category, extraItemForm.model);
+    const usingSerial = !!extraItemForm.serial;
+    const qty = usingSerial ? 1 : Math.max(1, Number(extraItemForm.qty) || 1);
+    const updatedInv = withItem.map((i) => {
+      if (i.id !== item.id) return i;
+      const serials = usingSerial ? (i.serials || []).filter((s) => s !== extraItemForm.serial) : (i.serials || []);
+      return { ...i, distributed: i.distributed + qty, serials };
+    });
+    const record = { id: `xi${Date.now()}`, category: extraItemForm.category, model: extraItemForm.model.trim(), qty, serial: extraItemForm.serial || null, date: new Date().toISOString().slice(0, 10) };
+    const nd = desks.map((d) => (d.id === deskId ? { ...d, extraItems: [...(d.extraItems || []), record] } : d));
+    persistAll(sites, nd, stock, zones, assets, purchaseOrders, { ...inventory, [sk]: updatedInv });
+    setExtraItemForm({ category: extraItemForm.category, model: "", qty: 1, serial: "" });
+    setSelected((c) => (c && c.id === deskId ? nd.find((d) => d.id === deskId) : c));
+  }
+  function removeExtraItem(deskId, sk, recordId) {
+    pushUndo();
+    const desk = desks.find((d) => d.id === deskId);
+    const record = (desk?.extraItems || []).find((r) => r.id === recordId);
+    let updatedInv = inventory;
+    if (record) {
+      const list = inventory[sk] || [];
+      const { list: withItem, item } = findOrCreateInvItem(list, record.category, record.model);
+      updatedInv = {
+        ...inventory,
+        [sk]: withItem.map((i) => (i.id === item.id ? {
+          ...i,
+          distributed: Math.max(0, i.distributed - record.qty),
+          serials: record.serial ? [...(i.serials || []), record.serial] : (i.serials || []),
+        } : i)),
+      };
+    }
+    const nd = desks.map((d) => (d.id === deskId ? { ...d, extraItems: (d.extraItems || []).filter((r) => r.id !== recordId) } : d));
+    persistAll(sites, nd, stock, zones, assets, purchaseOrders, updatedInv);
+    setSelected((c) => (c && c.id === deskId ? nd.find((d) => d.id === deskId) : c));
+  }
+
+  // ---- Equipment given to a person for home/WFH use — not tied to any desk ----
+  function addHomeItem(sk) {
+    if (!homeItemForm.person.trim() || !homeItemForm.model.trim()) return;
+    pushUndo();
+    const list = inventory[sk] || [];
+    const { list: withItem, item } = findOrCreateInvItem(list, homeItemForm.category, homeItemForm.model);
+    const usingSerial = !!homeItemForm.serial;
+    const qty = usingSerial ? 1 : Math.max(1, Number(homeItemForm.qty) || 1);
+    const updatedInv = withItem.map((i) => {
+      if (i.id !== item.id) return i;
+      const serials = usingSerial ? (i.serials || []).filter((s) => s !== homeItemForm.serial) : (i.serials || []);
+      return { ...i, distributed: i.distributed + qty, serials };
+    });
+    const record = {
+      id: `hi${Date.now()}`, person: homeItemForm.person.trim(), category: homeItemForm.category,
+      model: homeItemForm.model.trim(), qty, serial: homeItemForm.serial || null,
+      note: homeItemForm.note.trim(), date: homeItemForm.date || new Date().toISOString().slice(0, 10),
+    };
+    const list2 = homeItems[sk] || [];
+    persistAll(sites, desks, stock, zones, assets, purchaseOrders, { ...inventory, [sk]: updatedInv }, { ...homeItems, [sk]: [...list2, record] });
+    setHomeItemForm({ person: homeItemForm.person, category: homeItemForm.category, model: "", qty: 1, serial: "", note: "", date: homeItemForm.date });
+  }
+  // Reverses a home-item record's effect on inventory (used before editing or removing it).
+  function reverseHomeItemInventory(invBySite, sk, record) {
+    const list = invBySite[sk] || [];
+    const { list: withItem, item } = findOrCreateInvItem(list, record.category, record.model);
+    return {
+      ...invBySite,
+      [sk]: withItem.map((i) => (i.id === item.id ? {
+        ...i,
+        distributed: Math.max(0, i.distributed - record.qty),
+        serials: record.serial ? [...(i.serials || []), record.serial] : (i.serials || []),
+      } : i)),
+    };
+  }
+  // Edit an existing home-item record in place: reverses its old inventory
+  // effect, then applies the new one — so Inventory numbers stay correct
+  // no matter what changed (person, item, quantity, or serial).
+  function updateHomeItem(oldSk, recordId, patch) {
+    pushUndo();
+    const oldRecord = (homeItems[oldSk] || []).find((r) => r.id === recordId);
+    if (!oldRecord) return;
+    const newSk = patch.site || oldSk;
+    let updatedInv = reverseHomeItemInventory(inventory, oldSk, oldRecord);
+    const merged = { ...oldRecord, ...patch };
+    const list = updatedInv[newSk] || [];
+    const { list: withItem, item } = findOrCreateInvItem(list, merged.category, merged.model);
+    const usingSerial = !!merged.serial;
+    const qty = usingSerial ? 1 : Math.max(1, Number(merged.qty) || 1);
+    updatedInv = {
+      ...updatedInv,
+      [newSk]: withItem.map((i) => {
+        if (i.id !== item.id) return i;
+        const serials = usingSerial ? (i.serials || []).filter((s) => s !== merged.serial) : (i.serials || []);
+        return { ...i, distributed: i.distributed + qty, serials };
+      }),
+    };
+    merged.qty = qty;
+    const oldSiteList = (homeItems[oldSk] || []).filter((r) => r.id !== recordId);
+    const newSiteList = [...(newSk === oldSk ? oldSiteList : (homeItems[newSk] || [])), merged];
+    const nextHomeItems = { ...homeItems, [oldSk]: oldSiteList, [newSk]: newSiteList };
+    persistAll(sites, desks, stock, zones, assets, purchaseOrders, updatedInv, nextHomeItems);
+  }
+  function removeHomeItem(sk, recordId) {
+    pushUndo();
+    const list = homeItems[sk] || [];
+    const record = list.find((r) => r.id === recordId);
+    let updatedInv = inventory;
+    if (record) {
+      const invList = inventory[sk] || [];
+      const { list: withItem, item } = findOrCreateInvItem(invList, record.category, record.model);
+      updatedInv = {
+        ...inventory,
+        [sk]: withItem.map((i) => (i.id === item.id ? {
+          ...i,
+          distributed: Math.max(0, i.distributed - record.qty),
+          serials: record.serial ? [...(i.serials || []), record.serial] : (i.serials || []),
+        } : i)),
+      };
+    }
+    persistAll(sites, desks, stock, zones, assets, purchaseOrders, updatedInv, { ...homeItems, [sk]: list.filter((r) => r.id !== recordId) });
+  }
+
+  // Reassigning a desk to a different (or no) user: clears personal gear
+  // (mouse/headset/laptop) AND returns every logged extra item to stock —
+  // both travel with the person, so the new occupant starts with none.
+  // ---- Serial tracking for a desk's personal gear (Mouse/Headset/Laptop) ----
+  // Moving from oldSerial to newSerial returns the old unit to stock and
+  // consumes the new one, keeping Inventory's distributed count in sync.
+  function reconcileDeskSerial(sk, category, model, oldSerial, newSerial, invBySite) {
+    let inv = invBySite;
+    if (oldSerial) {
+      const list = inv[sk] || [];
+      const { list: withItem, item } = findOrCreateInvItem(list, category, model);
+      inv = { ...inv, [sk]: withItem.map((i) => (i.id === item.id ? { ...i, serials: [...(i.serials || []), oldSerial], distributed: Math.max(0, i.distributed - 1) } : i)) };
+    }
+    if (newSerial) {
+      const list = inv[sk] || [];
+      const { list: withItem, item } = findOrCreateInvItem(list, category, model);
+      inv = { ...inv, [sk]: withItem.map((i) => (i.id === item.id ? { ...i, serials: (i.serials || []).filter((s) => s !== newSerial), distributed: i.distributed + 1 } : i)) };
+    }
+    return inv;
+  }
+  function setPersonalGearSerial(desk, field, category, newSerial) {
+    pushUndo();
+    const model = desk.equipment[field + "Model"] || "";
+    const oldSerial = desk.equipment[field + "Serial"] || "";
+    const updatedInv = reconcileDeskSerial(desk.site, category, model, oldSerial, newSerial, inventory);
+    const nd = desks.map((d) => (d.id === desk.id ? { ...d, equipment: { ...d.equipment, [field + "Serial"]: newSerial || "" } } : d));
+    persistAll(sites, nd, stock, zones, assets, purchaseOrders, updatedInv);
+    setSelected((c) => (c && c.id === desk.id ? nd.find((d) => d.id === desk.id) : c));
+  }
+  function togglePersonalGear(desk, field, category, checked) {
+    const oldSerial = desk.equipment[field + "Serial"] || "";
+    if (!checked && oldSerial) {
+      pushUndo();
+      const model = desk.equipment[field + "Model"] || "";
+      const updatedInv = reconcileDeskSerial(desk.site, category, model, oldSerial, "", inventory);
+      const nd = desks.map((d) => (d.id === desk.id ? { ...d, equipment: { ...d.equipment, [field]: false, [field + "Serial"]: "" } } : d));
+      persistAll(sites, nd, stock, zones, assets, purchaseOrders, updatedInv);
+      setSelected((c) => (c && c.id === desk.id ? nd.find((d) => d.id === desk.id) : c));
+    } else {
+      updateDesk(desk.id, { equipment: { ...desk.equipment, [field]: checked } }, `${field} ${checked ? "added" : "removed"}`);
+    }
+  }
+
+  function reassignDeskUser(desk, newUser) {
+    pushUndo();
+    const sk = desk.site;
+    let updatedInv = inventory;
+    (desk.extraItems || []).forEach((record) => {
+      const list = updatedInv[sk] || [];
+      const { list: withItem, item } = findOrCreateInvItem(list, record.category, record.model);
+      updatedInv = {
+        ...updatedInv,
+        [sk]: withItem.map((i) => (i.id === item.id ? {
+          ...i,
+          distributed: Math.max(0, i.distributed - record.qty),
+          serials: record.serial ? [...(i.serials || []), record.serial] : (i.serials || []),
+        } : i)),
+      };
+    });
+    [["mouse", "Mouse"], ["headset", "Headphone"], ["laptop", "Laptop"]].forEach(([field, category]) => {
+      const serial = desk.equipment[field + "Serial"];
+      if (serial) updatedInv = reconcileDeskSerial(sk, category, desk.equipment[field + "Model"] || "", serial, "", updatedInv);
+    });
+    const nd = desks.map((d) => (d.id === desk.id ? {
+      ...d,
+      user: newUser,
+      equipment: { ...d.equipment, laptop: false, laptopModel: "", laptopSerial: "", headset: false, headsetModel: "", headsetSerial: "", mouse: false, mouseModel: "", mouseSerial: "" },
+      extraItems: [],
+      history: [{ ts: Date.now(), action: newUser ? `Assigned to ${newUser} (all personal gear & extra items cleared)` : "Unassigned (all personal gear & extra items cleared)", by: "You" }, ...d.history].slice(0, 8),
+    } : d));
+    persistAll(sites, nd, stock, zones, assets, purchaseOrders, updatedInv);
+    setSelected((c) => (c && c.id === desk.id ? nd.find((d) => d.id === desk.id) : c));
+  }
+
   function addPO(sk) {
     if (!poForm.poNumber.trim() || !poForm.item.trim()) return;
     pushUndo();
     const list = purchaseOrders[sk] || [];
+    const qty = Math.max(1, Number(poForm.qty) || 1);
     const entry = {
       id: `po${Date.now()}`,
       poNumber: poForm.poNumber.trim(),
       date: poForm.date || new Date().toISOString().slice(0, 10),
       vendor: poForm.vendor.trim(),
+      category: poForm.category,
       item: poForm.item.trim(),
-      qty: Math.max(1, Number(poForm.qty) || 1),
+      qty,
       unitCost: poForm.unitCost === "" ? null : Number(poForm.unitCost),
       note: poForm.note.trim(),
       addedAt: Date.now(),
     };
-    persistAll(sites, desks, stock, zones, assets, { ...purchaseOrders, [sk]: [...list, entry] });
-    setPoForm({ poNumber: poForm.poNumber, date: poForm.date, vendor: poForm.vendor, item: "", qty: 1, unitCost: "", note: "" });
+    const updatedInv = upsertInventoryPurchase(sk, poForm.category, poForm.item, qty, poForm.serials);
+    persistAll(sites, desks, stock, zones, assets, { ...purchaseOrders, [sk]: [...list, entry] }, updatedInv);
+    setPoForm({ poNumber: poForm.poNumber, date: poForm.date, vendor: poForm.vendor, category: poForm.category, item: "", qty: 1, unitCost: "", note: "", serials: "" });
   }
   function removePO(sk, id) {
     pushUndo();
@@ -958,11 +1284,39 @@ function DeskDashboard() {
 
   // ---- Backup export / import ----
   function exportData() {
-    const payload = { exportedAt: new Date().toISOString(), sites, desks, stock, zones, assets };
+    const payload = { exportedAt: new Date().toISOString(), sites, desks, stock, zones, assets, purchaseOrders, inventory, homeItems };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url; a.download = `desk-tracker-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  function csvCell(v) {
+    const s = v === null || v === undefined ? "" : String(v);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  }
+  function exportCsv() {
+    const headers = ["Site", "Desk #", "User", "Status", "Monitors", "Dock", "Dock model", "Keyboard", "Keyboard model", "Mouse", "Mouse model", "Mouse serial", "Headset", "Headset model", "Headset serial", "Laptop", "Laptop model", "Laptop serial"];
+    const rows = [headers];
+    visibleSites.forEach((s) => {
+      desks.filter((d) => d.site === s.key).sort((a, b) => a.number - b.number).forEach((d) => {
+        const e = d.equipment;
+        rows.push([
+          s.label, d.number, d.user || "", SEAT[d.status].label, e.monitors,
+          e.dock ? "Yes" : "No", e.dockModel || "",
+          e.keyboard ? "Yes" : "No", e.keyboardModel || "",
+          e.mouse ? "Yes" : "No", e.mouseModel || "", e.mouseSerial || "",
+          e.headset ? "Yes" : "No", e.headsetModel || "", e.headsetSerial || "",
+          e.laptop ? "Yes" : "No", e.laptopModel || "", e.laptopSerial || "",
+        ]);
+      });
+    });
+    const csv = rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `desk-tracker-desks-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -975,7 +1329,7 @@ function DeskDashboard() {
         const payload = JSON.parse(reader.result);
         if (!payload.sites || !payload.desks) throw new Error("bad file");
         pushUndo();
-        persistAll(payload.sites, payload.desks, payload.stock || {}, payload.zones || {}, payload.assets || {});
+        persistAll(payload.sites, payload.desks, payload.stock || {}, payload.zones || {}, payload.assets || {}, payload.purchaseOrders || {}, payload.inventory || {}, payload.homeItems || {});
       } catch {
         alert("Couldn't read that file — make sure it's a backup exported from this app.");
       }
@@ -986,27 +1340,77 @@ function DeskDashboard() {
 
   const visibleSites = useMemo(() => sites.filter((s) => !s.hidden), [sites]);
   const globalSummary = useMemo(() => siteSummary(desks.filter((d) => visibleSites.some((s) => s.key === d.site))), [desks, visibleSites]);
-  const searchResults = useMemo(() => { if (!query.trim()) return []; const q = query.toLowerCase(); return desks.filter((d) => d.id.toLowerCase().includes(q) || String(d.number).includes(q) || (d.user && d.user.toLowerCase().includes(q))); }, [query, desks]);
+  const searchResults = useMemo(() => {
+    if (!query.trim()) return [];
+    const q = query.toLowerCase();
+    const results = [];
+    desks.forEach((d) => {
+      if (!visibleSites.some((s) => s.key === d.site)) return;
+      if (d.id.toLowerCase().includes(q) || String(d.number).includes(q) || (d.user && d.user.toLowerCase().includes(q))) {
+        const site = visibleSites.find((s) => s.key === d.site);
+        results.push({ type: "Desk", primary: `#${d.number}${d.user ? " · " + d.user : ""}`, secondary: site ? site.label : d.site, onSelect: () => { setTab(d.site); setSiteView("floor"); setSelected(d); } });
+      }
+    });
+    visibleSites.forEach((s) => {
+      (purchaseOrders[s.key] || []).forEach((p) => {
+        if (p.poNumber.toLowerCase().includes(q) || p.item.toLowerCase().includes(q) || (p.vendor || "").toLowerCase().includes(q)) {
+          results.push({ type: "PO", primary: `${p.poNumber} · ${p.item}`, secondary: s.label, onSelect: () => { setTab(s.key); setSiteView("po"); } });
+        }
+      });
+      (inventory[s.key] || []).forEach((i) => {
+        if (i.model.toLowerCase().includes(q) || i.category.toLowerCase().includes(q)) {
+          results.push({ type: "Inventory", primary: `${i.model} (${i.category})`, secondary: s.label, onSelect: () => { setTab(s.key); setSiteView("inventory"); } });
+        }
+      });
+      (homeItems[s.key] || []).forEach((r) => {
+        if (r.person.toLowerCase().includes(q) || r.model.toLowerCase().includes(q)) {
+          results.push({ type: "Home", primary: `${r.person} · ${r.qty}× ${r.model}`, secondary: s.label, onSelect: () => { setTab("finduser"); setLookupUser(r.person); } });
+        }
+      });
+    });
+    return results.slice(0, 8);
+  }, [query, desks, purchaseOrders, inventory, homeItems, visibleSites]);
   const canEdit = role === "admin";
-  const navTabs = [{ key: "overview", label: "Overview" }, { key: "people", label: "People" }, ...visibleSites];
+  const navTabs = [{ key: "overview", label: "Overview" }, { key: "people", label: "People" }, { key: "finduser", label: "Find User" }, ...visibleSites];
   const totalAssets = useMemo(() => Object.values(assets).reduce((s, list) => s + (list || []).reduce((ss, a) => ss + a.qty, 0), 0), [assets]);
 
   const peopleDirectory = useMemo(() => {
     const map = {};
     desks.filter((d) => d.user && visibleSites.some((s) => s.key === d.site)).forEach((d) => {
-      if (!map[d.user]) map[d.user] = { name: d.user, entries: [] };
+      if (!map[d.user]) map[d.user] = { name: d.user, entries: [], home: [] };
       const site = visibleSites.find((s) => s.key === d.site);
       map[d.user].entries.push({ siteLabel: site ? site.label : d.site, siteKey: d.site, number: d.number, equipment: d.equipment });
     });
+    visibleSites.forEach((s) => {
+      (homeItems[s.key] || []).forEach((r) => {
+        if (!map[r.person]) map[r.person] = { name: r.person, entries: [], home: [] };
+        map[r.person].home.push({ ...r, siteLabel: s.label });
+      });
+    });
     return Object.values(map).sort((a, b) => a.name.localeCompare(b.name));
-  }, [desks, visibleSites]);
-  const knownUserNames = useMemo(() => [...new Set(desks.filter((d) => d.user).map((d) => d.user))].sort(), [desks]);
+  }, [desks, visibleSites, homeItems]);
+  const knownUserNames = useMemo(() => {
+    const names = new Set(desks.filter((d) => d.user).map((d) => d.user));
+    visibleSites.forEach((s) => (homeItems[s.key] || []).forEach((r) => names.add(r.person)));
+    return [...names].sort();
+  }, [desks, visibleSites, homeItems]);
 
   useEffect(() => {
-    if (tab !== "overview" && tab !== "people" && !visibleSites.some((s) => s.key === tab)) setTab("overview");
+    if (tab !== "overview" && tab !== "people" && tab !== "finduser" && !visibleSites.some((s) => s.key === tab)) setTab("overview");
   }, [visibleSites, tab]);
 
   if (loading) return <div className="flex min-h-screen items-center justify-center" style={{ background: C.bg, color: C.sub }}><Loader2 className="h-5 w-5 animate-spin" /></div>;
+
+  if (loadError) return (
+    <div className="flex min-h-screen items-center justify-center p-6" style={{ background: C.bg }}>
+      <div className="max-w-sm rounded-md p-5 text-center" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+        <AlertTriangle className="mx-auto mb-2 h-6 w-6" style={{ color: SEAT.occupied.color }} />
+        <p className="mb-1 text-sm font-semibold">Couldn't load your saved data</p>
+        <p className="mb-4 text-xs" style={{ color: C.sub }}>This is likely a connection or Firebase issue. Your saved data has <b>not</b> been changed or overwritten — nothing will be touched until this loads successfully. Check your connection and try again.</p>
+        <button onClick={loadAllData} className="rounded px-3 py-1.5 text-sm font-medium text-white" style={{ background: C.primary }}>Retry</button>
+      </div>
+    </div>
+  );
 
   const globalStock = {};
   PRESET_ITEMS.concat([{ key: "laptop", label: "Laptops" }]).forEach((item) => {
@@ -1015,20 +1419,34 @@ function DeskDashboard() {
     globalStock[item.key] = { inUse, spare, label: item.label };
   });
 
+  const globalInventory = [];
+  visibleSites.forEach((s) => {
+    (inventory[s.key] || []).forEach((i) => {
+      const key = i.category + "|" + i.model.trim().toLowerCase();
+      let row = globalInventory.find((r) => r.key === key);
+      if (!row) { row = { key, category: i.category, model: i.model, purchased: 0, distributed: 0, serialCount: 0 }; globalInventory.push(row); }
+      row.purchased += i.purchased;
+      row.distributed += i.distributed;
+      row.serialCount += (i.serials || []).length;
+    });
+  });
+
   return (
     <div className="min-h-screen p-6 print:p-0" style={{ background: C.bg, color: C.text, fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif" }}>
+      <datalist id="known-user-names">{knownUserNames.map((n) => <option key={n} value={n} />)}</datalist>
       <div className="mx-auto max-w-7xl">
         <header className="mb-5 flex flex-wrap items-center justify-between gap-3 print:hidden">
           <div><h1 className="text-lg font-semibold tracking-tight">Seat & Desk Tracker</h1><p className="text-xs" style={{ color: C.sub }}>Dixstone IT{saveError && <span className="ml-2" style={{ color: SEAT.occupied.color }}>· save failed</span>}</p></div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
               <Search className="pointer-events-none absolute left-2.5 top-2.5 h-3.5 w-3.5" style={{ color: C.sub }} />
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find desk or user…" className="w-44 rounded py-1.5 pl-8 pr-2 text-xs outline-none" style={{ background: C.card, border: `1px solid ${C.border}` }} />
+              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Find desk, user, PO, item…" className="w-48 rounded py-1.5 pl-8 pr-2 text-xs outline-none" style={{ background: C.card, border: `1px solid ${C.border}` }} />
               {searchResults.length > 0 && (
-                <div className="absolute right-0 z-30 mt-1 w-64 rounded-md p-1 shadow-lg" style={{ background: C.card, border: `1px solid ${C.border}` }}>
-                  {searchResults.slice(0, 6).map((d) => (
-                    <button key={d.id} onClick={() => { setTab(d.site); setSiteView("floor"); setSelected(d); setQuery(""); }} className="flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs hover:bg-slate-50">
-                      <span className="font-medium">#{d.number}</span><span style={{ color: C.sub }}>{d.user ?? "unassigned"} · {sites.find((s) => s.key === d.site)?.label}</span>
+                <div className="absolute right-0 z-30 mt-1 w-72 rounded-md p-1 shadow-lg" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                  {searchResults.map((r, i) => (
+                    <button key={i} onClick={() => { r.onSelect(); setQuery(""); }} className="flex w-full items-center justify-between gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-slate-50">
+                      <span className="flex items-center gap-1.5"><span className="rounded px-1 py-0.5 text-[9px] font-medium" style={{ background: C.grid, color: C.sub }}>{r.type}</span><span className="font-medium">{r.primary}</span></span>
+                      <span className="shrink-0" style={{ color: C.sub }}>{r.secondary}</span>
                     </button>
                   ))}
                 </div>
@@ -1037,6 +1455,7 @@ function DeskDashboard() {
             {canEdit && <button disabled={!canUndo} onClick={undo} className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium disabled:opacity-40" style={{ background: C.card, border: `1px solid ${C.border}` }}><Undo2 className="h-3.5 w-3.5" /> Undo</button>}
             {canEdit && <button onClick={() => setManageOpen(true)} className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium" style={{ background: C.card, border: `1px solid ${C.border}` }}><Settings className="h-3.5 w-3.5" /> Manage Sites</button>}
             <button onClick={exportData} className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium" style={{ background: C.card, border: `1px solid ${C.border}` }}><Download className="h-3.5 w-3.5" /> Export</button>
+            <button onClick={exportCsv} className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium" style={{ background: C.card, border: `1px solid ${C.border}` }} title="Desk list as CSV, for Excel"><Download className="h-3.5 w-3.5" /> Export CSV</button>
             {canEdit && (
               <>
                 <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium" style={{ background: C.card, border: `1px solid ${C.border}` }}><Upload className="h-3.5 w-3.5" /> Import</button>
@@ -1106,6 +1525,16 @@ function DeskDashboard() {
               <div className="mb-2 flex items-center gap-1.5 text-sm font-medium"><Boxes className="h-4 w-4" /> Total stock across all sites</div>
               {Object.entries(globalStock).map(([k, v]) => <div key={k} className="flex items-center justify-between py-1.5 text-sm" style={{ borderBottom: `1px solid ${C.border}` }}><span>{v.label}</span><span className="text-xs" style={{ color: C.sub }}>{v.inUse} in use · {v.spare} spare · {v.inUse + v.spare} total</span></div>)}
             </div>
+            <div className="rounded-md p-4" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+              <div className="mb-2 flex items-center gap-1.5 text-sm font-medium"><Archive className="h-4 w-4" /> Total inventory across all sites</div>
+              {globalInventory.length === 0 && <p className="text-xs" style={{ color: C.sub }}>No inventory logged yet — add a Purchase Order or an inventory item on any site.</p>}
+              {[...globalInventory].sort((a, b) => a.category.localeCompare(b.category) || a.model.localeCompare(b.model)).map((r) => (
+                <div key={r.key} className="flex items-center justify-between py-1.5 text-sm" style={{ borderBottom: `1px solid ${C.border}` }}>
+                  <span>{r.model} <span className="text-xs" style={{ color: C.sub }}>({r.category})</span></span>
+                  <span className="text-xs" style={{ color: C.sub }}>{r.purchased} purchased · {r.distributed} distributed · <b style={{ color: r.purchased - r.distributed < 2 ? SEAT.occupied.color : C.text }}>{r.purchased - r.distributed} available</b>{r.serialCount > 0 ? ` · ${r.serialCount} serials tracked` : ""}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -1118,9 +1547,9 @@ function DeskDashboard() {
             </div>
             <div className="overflow-hidden rounded-md" style={{ background: C.card, border: `1px solid ${C.border}` }}>
               <table className="w-full text-sm">
-                <thead><tr style={{ borderBottom: `1px solid ${C.border}`, color: C.sub }} className="text-left text-xs"><th className="px-3 py-2">Name</th><th className="px-3 py-2">Sites & desks</th><th className="px-3 py-2">Personal gear</th></tr></thead>
+                <thead><tr style={{ borderBottom: `1px solid ${C.border}`, color: C.sub }} className="text-left text-xs"><th className="px-3 py-2">Name</th><th className="px-3 py-2">Sites & desks</th><th className="px-3 py-2">Personal gear</th><th className="px-3 py-2">Home equipment</th></tr></thead>
                 <tbody>
-                  {peopleDirectory.length === 0 && <tr><td colSpan={3} className="px-3 py-6 text-center text-xs" style={{ color: C.sub }}>No desks assigned to anyone yet.</td></tr>}
+                  {peopleDirectory.length === 0 && <tr><td colSpan={4} className="px-3 py-6 text-center text-xs" style={{ color: C.sub }}>No desks assigned to anyone yet.</td></tr>}
                   {peopleDirectory.map((p) => {
                     const siteCount = new Set(p.entries.map((e) => e.siteKey)).size;
                     return (
@@ -1130,6 +1559,7 @@ function DeskDashboard() {
                           {siteCount > 1 && <span className="ml-1.5 rounded-full px-1.5 py-0.5 text-[9px] font-medium" style={{ background: "#EAF3FB", color: C.primary }}>multi-site</span>}
                         </td>
                         <td className="px-3 py-2 align-top" style={{ color: C.sub }}>
+                          {p.entries.length === 0 && <span>—</span>}
                           {p.entries.map((e, i) => <div key={i}>{e.siteLabel} · Desk #{e.number}</div>)}
                         </td>
                         <td className="px-3 py-2 align-top text-xs" style={{ color: C.sub }}>
@@ -1141,6 +1571,10 @@ function DeskDashboard() {
                             return <div key={i}>{parts.length ? parts.join(", ") : "—"}</div>;
                           })}
                         </td>
+                        <td className="px-3 py-2 align-top text-xs" style={{ color: C.sub }}>
+                          {(p.home || []).length === 0 && <span>—</span>}
+                          {(p.home || []).map((h, i) => <div key={i}>{h.qty}× {h.model} <span style={{ color: C.sub }}>({h.category}{h.serial ? ` · SN ${h.serial}` : ""} · {h.siteLabel})</span></div>)}
+                        </td>
                       </tr>
                     );
                   })}
@@ -1150,15 +1584,135 @@ function DeskDashboard() {
           </div>
         )}
 
+        {tab === "finduser" && (() => {
+          const userDesks = desks.filter((d) => d.user === lookupUser && visibleSites.some((s) => s.key === d.site));
+          const userHomeItems = [];
+          visibleSites.forEach((s) => (homeItems[s.key] || []).forEach((r) => { if (r.person === lookupUser) userHomeItems.push({ ...r, siteKey: s.key, siteLabel: s.label }); }));
+          const found = lookupUser.trim() !== "";
+          return (
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-end gap-2 print:hidden">
+                <div>
+                  <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>User name</label>
+                  <input value={lookupUser} onChange={(e) => setLookupUser(e.target.value)} placeholder="Type or pick a name…" list="known-user-names" className="w-64 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                </div>
+                {found && <button onClick={() => window.print()} className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-white" style={{ background: C.primary }}><Printer className="h-3.5 w-3.5" /> Print / Save PDF</button>}
+              </div>
+
+              {!found && <p className="text-sm" style={{ color: C.sub }}>Type a name above to see every desk, location, and item allocated to them.</p>}
+
+              {found && (
+                <>
+                  <h2 className="text-base font-semibold">{lookupUser}</h2>
+
+                  <div>
+                    <h3 className="mb-2 text-sm font-medium">Desks & locations</h3>
+                    {userDesks.length === 0 && <p className="text-xs" style={{ color: C.sub }}>No desk assigned to this user.</p>}
+                    <div className="space-y-2">
+                      {userDesks.map((d) => {
+                        const site = visibleSites.find((s) => s.key === d.site);
+                        return (
+                          <div key={d.id} className="rounded-md p-3" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                            <div className="mb-1.5 flex items-center justify-between">
+                              <span className="text-sm font-medium">{site ? site.label : d.site} — Desk #{d.number}</span>
+                              {canEdit && <button onClick={() => setSelected(d)} className="rounded px-2 py-1 text-[11px] font-medium print:hidden" style={{ border: `1px solid ${C.border}`, color: C.primary }}>Edit this desk</button>}
+                            </div>
+                            <p className="text-xs" style={{ color: C.sub }}>
+                              Status: {SEAT[d.status].label} · Monitors: {d.equipment.monitors}
+                              {d.equipment.dock ? ` · Dock${d.equipment.dockModel ? ` (${d.equipment.dockModel})` : ""}` : ""}
+                              {d.equipment.keyboard ? ` · Keyboard${d.equipment.keyboardModel ? ` (${d.equipment.keyboardModel})` : ""}` : ""}
+                            </p>
+                            <p className="text-xs" style={{ color: C.sub }}>
+                              Personal gear: {[
+                                d.equipment.mouse ? "Mouse" + (d.equipment.mouseModel ? ` (${d.equipment.mouseModel})` : "") : null,
+                                d.equipment.headset ? "Headset" + (d.equipment.headsetModel ? ` (${d.equipment.headsetModel})` : "") : null,
+                                d.equipment.laptop ? "Laptop" + (d.equipment.laptopModel ? ` (${d.equipment.laptopModel})` : "") : null,
+                              ].filter(Boolean).join(", ") || "None"}
+                            </p>
+                            {(d.extraItems || []).length > 0 && (
+                              <p className="text-xs" style={{ color: C.sub }}>
+                                Extra items: {d.extraItems.map((r) => `${r.qty}× ${r.model}${r.serial ? ` (SN ${r.serial})` : ""}`).join(", ")}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="mb-2 text-sm font-medium">Home equipment</h3>
+                    <div className="overflow-hidden rounded-md" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                      <table className="w-full text-sm">
+                        <thead><tr style={{ borderBottom: `1px solid ${C.border}`, color: C.sub }} className="text-left text-xs"><th className="px-3 py-2">Site</th><th className="px-3 py-2">Category</th><th className="px-3 py-2">Item / model</th><th className="px-3 py-2">Qty</th><th className="px-3 py-2">Serial</th><th className="px-3 py-2">Date</th><th className="px-3 py-2">Remarks</th><th className="px-3 py-2 print:hidden"></th></tr></thead>
+                        <tbody>
+                          {userHomeItems.length === 0 && <tr><td colSpan={8} className="px-3 py-4 text-center text-xs" style={{ color: C.sub }}>None logged.</td></tr>}
+                          {userHomeItems.map((r) => {
+                            const isEditing = editingHomeItem === r.id;
+                            if (isEditing && editHomeForm) {
+                              return (
+                                <tr key={r.id} style={{ borderBottom: `1px solid ${C.border}` }}>
+                                  <td className="px-3 py-2 text-xs" style={{ color: C.sub }}>{r.siteLabel}</td>
+                                  <td className="px-3 py-2"><select value={editHomeForm.category} onChange={(e) => setEditHomeForm({ ...editHomeForm, category: e.target.value })} className="rounded px-1.5 py-1 text-xs" style={{ border: `1px solid ${C.border}` }}>{ITEM_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></td>
+                                  <td className="px-3 py-2"><input value={editHomeForm.model} onChange={(e) => setEditHomeForm({ ...editHomeForm, model: e.target.value })} className="w-32 rounded px-1.5 py-1 text-xs" style={{ border: `1px solid ${C.border}` }} /></td>
+                                  <td className="px-3 py-2"><input type="number" min={1} value={editHomeForm.qty} onChange={(e) => setEditHomeForm({ ...editHomeForm, qty: e.target.value })} className="w-14 rounded px-1.5 py-1 text-xs" style={{ border: `1px solid ${C.border}` }} /></td>
+                                  <td className="px-3 py-2"><input value={editHomeForm.serial} onChange={(e) => setEditHomeForm({ ...editHomeForm, serial: e.target.value })} className="w-20 rounded px-1.5 py-1 text-xs" style={{ border: `1px solid ${C.border}` }} /></td>
+                                  <td className="px-3 py-2"><input type="date" value={editHomeForm.date} onChange={(e) => setEditHomeForm({ ...editHomeForm, date: e.target.value })} className="w-32 rounded px-1.5 py-1 text-xs" style={{ border: `1px solid ${C.border}` }} /></td>
+                                  <td className="px-3 py-2"><input value={editHomeForm.note} onChange={(e) => setEditHomeForm({ ...editHomeForm, note: e.target.value })} className="w-28 rounded px-1.5 py-1 text-xs" style={{ border: `1px solid ${C.border}` }} /></td>
+                                  <td className="px-3 py-2 print:hidden">
+                                    <div className="flex gap-1">
+                                      <button onClick={() => { updateHomeItem(r.siteKey, r.id, editHomeForm); setEditingHomeItem(null); setEditHomeForm(null); }} className="rounded px-2 py-1 text-[11px] font-medium text-white" style={{ background: C.primary }}>Save</button>
+                                      <button onClick={() => { setEditingHomeItem(null); setEditHomeForm(null); }} className="rounded px-2 py-1 text-[11px] font-medium" style={{ border: `1px solid ${C.border}` }}>Cancel</button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            }
+                            return (
+                              <tr key={r.id} style={{ borderBottom: `1px solid ${C.border}` }}>
+                                <td className="px-3 py-2 text-xs" style={{ color: C.sub }}>{r.siteLabel}</td>
+                                <td className="px-3 py-2" style={{ color: C.sub }}>{r.category}</td>
+                                <td className="px-3 py-2 font-medium">{r.model}</td>
+                                <td className="px-3 py-2">{r.qty}</td>
+                                <td className="px-3 py-2" style={{ color: C.sub }}>{r.serial || "—"}</td>
+                                <td className="px-3 py-2 text-xs" style={{ color: C.sub }}>{r.date}</td>
+                                <td className="px-3 py-2" style={{ color: C.sub }}>{r.note || "—"}</td>
+                                <td className="px-3 py-2 print:hidden">
+                                  {canEdit && (
+                                    <div className="flex gap-1">
+                                      <button onClick={() => { setEditingHomeItem(r.id); setEditHomeForm({ category: r.category, model: r.model, qty: r.qty, serial: r.serial || "", note: r.note || "", date: r.date }); }} className="rounded px-2 py-1 text-[11px] font-medium" style={{ border: `1px solid ${C.border}` }}>Edit</button>
+                                      <button onClick={() => removeHomeItem(r.siteKey, r.id)}><Trash2 className="h-3.5 w-3.5" style={{ color: SEAT.occupied.color }} /></button>
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div className="hidden pt-8 text-xs print:block" style={{ color: C.text }}>
+                    <p>Received / verified by: _______________________________&nbsp;&nbsp;&nbsp;&nbsp;Date: ______________</p>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })()}
+
         {sites.map((s) => {
           if (tab !== s.key) return null;
           const siteDesks = desks.filter((d) => d.site === s.key);
           const sum = siteSummary(siteDesks);
           const siteStock = stock[s.key] || emptyStock(s.key);
-          const items = s.key === "dubai" ? PRESET_ITEMS.concat([{ key: "laptop", label: "Laptops", icon: Laptop }]) : PRESET_ITEMS;
+          const items = PRESET_ITEMS.concat([{ key: "laptop", label: "Laptops", icon: Laptop }]);
           const siteZones = zones[s.key] || [];
           const siteAssets = assets[s.key] || [];
           const sitePOs = purchaseOrders[s.key] || [];
+          const siteInventory = inventory[s.key] || [];
+          const siteHomeItems = homeItems[s.key] || [];
 
           return (
             <div key={s.key}>
@@ -1172,7 +1726,7 @@ function DeskDashboard() {
 
               <div className="mb-3 flex flex-wrap items-center gap-2 print:hidden">
                 <div className="flex flex-wrap gap-1 rounded-md p-1 w-fit" style={{ background: C.card, border: `1px solid ${C.border}` }}>
-                  {[{ k: "floor", l: "Floor Layout", i: LayoutGrid }, { k: "3d", l: "3D View", i: Box3dIcon }, { k: "list", l: "Desk List", i: List }, { k: "stock", l: "Stock", i: Boxes }, { k: "assets", l: "Assets", i: Package }, { k: "po", l: "Purchase Orders", i: Receipt }, { k: "report", l: "Report", i: ClipboardList }].map((v) => (
+                  {[{ k: "floor", l: "Floor Layout", i: LayoutGrid }, { k: "3d", l: "3D View", i: Box3dIcon }, { k: "list", l: "Desk List", i: List }, { k: "stock", l: "Stock", i: Boxes }, { k: "assets", l: "Assets", i: Package }, { k: "po", l: "Purchase Orders", i: Receipt }, { k: "inventory", l: "Inventory", i: Archive }, { k: "home", l: "Home equipment", i: Home }, { k: "report", l: "Report", i: ClipboardList }].map((v) => (
                     <button key={v.k} onClick={() => setSiteView(v.k)} className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium" style={siteView === v.k ? { background: C.primary, color: "#fff" } : { color: C.sub }}><v.i className="h-3.5 w-3.5" /> {v.l}</button>
                   ))}
                 </div>
@@ -1199,7 +1753,7 @@ function DeskDashboard() {
                   <div className="mb-3 flex flex-wrap gap-3 text-xs print:hidden" style={{ color: C.sub }}>
                     {Object.entries(SEAT).map(([k, st]) => <div key={k} className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full" style={{ background: st.seat, opacity: st.dashed ? 0.6 : 1 }} /> {st.label}</div>)}
                   </div>
-                  <div className="relative overflow-auto rounded-lg" style={{ background: C.card, border: `1px solid ${C.border}`, height: 660, backgroundImage: `linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`, backgroundSize: "22px 22px" }}
+                  <div className="relative overflow-auto rounded-lg" style={{ background: C.card, border: `1px solid ${C.border}`, height: 660 }}
                     onPointerUp={() => { commitDeskPosition(); commitZones(); }}>
                     <FloorCanvas
                       desks={siteDesks}
@@ -1338,13 +1892,125 @@ function DeskDashboard() {
                       <input value={poForm.poNumber} onChange={(e) => setPoForm({ ...poForm, poNumber: e.target.value })} placeholder="PO number" className="w-28 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
                       <input type="date" value={poForm.date} onChange={(e) => setPoForm({ ...poForm, date: e.target.value })} className="w-36 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
                       <input value={poForm.vendor} onChange={(e) => setPoForm({ ...poForm, vendor: e.target.value })} placeholder="Vendor (optional)" className="w-32 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
-                      <input value={poForm.item} onChange={(e) => setPoForm({ ...poForm, item: e.target.value })} placeholder="Item purchased" className="flex-1 min-w-[140px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <select value={poForm.category} onChange={(e) => setPoForm({ ...poForm, category: e.target.value })} className="rounded px-2 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }}>
+                        {ITEM_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                      <input value={poForm.item} onChange={(e) => setPoForm({ ...poForm, item: e.target.value })} placeholder="Item / model purchased" list="known-inventory-models" className="flex-1 min-w-[140px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
                       <input type="number" min={1} value={poForm.qty} onChange={(e) => setPoForm({ ...poForm, qty: e.target.value })} className="w-16 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} title="Quantity" />
                       <input type="number" min={0} step="0.01" value={poForm.unitCost} onChange={(e) => setPoForm({ ...poForm, unitCost: e.target.value })} placeholder="Unit cost" className="w-24 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
                       <input value={poForm.note} onChange={(e) => setPoForm({ ...poForm, note: e.target.value })} placeholder="Note (optional)" className="flex-1 min-w-[120px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input value={poForm.serials} onChange={(e) => setPoForm({ ...poForm, serials: e.target.value })} placeholder="Serial numbers, comma-separated (optional)" className="w-full rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
                       <button onClick={() => addPO(s.key)} className="flex items-center gap-1 rounded px-2.5 py-1.5 text-xs font-medium text-white" style={{ background: C.primary }}><Plus className="h-3.5 w-3.5" /> Add</button>
+                      <p className="w-full text-[11px]" style={{ color: C.sub }}>Adding a PO line automatically adds that quantity to Inventory's "purchased" count for the matching category + item name. Add serial numbers here if this batch is individually serialized (e.g. laptops) — leave blank for bulk items like cables.</p>
+                      <datalist id="known-inventory-models">{(inventory[s.key] || []).map((i) => <option key={i.id} value={i.model} />)}</datalist>
                     </div>
                   )}
+                </div>
+              )}
+
+              {siteView === "inventory" && (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <StatCard icon={Download} label="Purchased" value={siteInventory.reduce((s2, i) => s2 + i.purchased, 0)} color="#605E5C" />
+                    <StatCard icon={Upload} label="Distributed" value={siteInventory.reduce((s2, i) => s2 + i.distributed, 0)} color={C.primary} />
+                    <StatCard icon={CheckCircle2} label="Available" value={siteInventory.reduce((s2, i) => s2 + (i.purchased - i.distributed), 0)} color={SEAT.available.color} />
+                    <StatCard icon={AlertTriangle} label="Low stock (<2)" value={siteInventory.filter((i) => i.purchased - i.distributed < 2).length} color="#F7630C" />
+                  </div>
+                  <div className="overflow-hidden rounded-md" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                    <table className="w-full text-sm">
+                      <thead><tr style={{ borderBottom: `1px solid ${C.border}`, color: C.sub }} className="text-left text-xs"><th className="px-3 py-2">Category</th><th className="px-3 py-2">Item / model</th><th className="px-3 py-2">Purchased</th><th className="px-3 py-2">Distributed</th><th className="px-3 py-2">Available</th><th className="px-3 py-2">Serials in stock</th><th className="px-3 py-2"></th></tr></thead>
+                      <tbody>
+                        {siteInventory.length === 0 && <tr><td colSpan={7} className="px-3 py-6 text-center text-xs" style={{ color: C.sub }}>No inventory items yet — add one below, or add a Purchase Order and it'll show up here automatically.</td></tr>}
+                        {[...siteInventory].sort((a, b) => a.category.localeCompare(b.category) || a.model.localeCompare(b.model)).map((i) => {
+                          const available = i.purchased - i.distributed;
+                          return (
+                            <tr key={i.id} style={{ borderBottom: `1px solid ${C.border}` }}>
+                              <td className="px-3 py-2 align-top" style={{ color: C.sub }}>{i.category}</td>
+                              <td className="px-3 py-2 align-top font-medium">{i.model}</td>
+                              <td className="px-3 py-2 align-top">{i.purchased}</td>
+                              <td className="px-3 py-2 align-top">{i.distributed}</td>
+                              <td className="px-3 py-2 align-top font-medium" style={{ color: available < 2 ? SEAT.occupied.color : C.text }}>{available}</td>
+                              <td className="px-3 py-2 align-top">
+                                {(i.serials || []).length === 0 ? <span style={{ color: C.sub }}>—</span> : (
+                                  <div className="flex flex-wrap gap-1">
+                                    {i.serials.map((s2) => (
+                                      <span key={s2} className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px]" style={{ background: C.grid, color: C.text }}>
+                                        {s2}
+                                        {canEdit && <button onClick={() => removeInventorySerial(s.key, i.id, s2)} className="print:hidden">×</button>}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </td>
+                              <td className="px-3 py-2 align-top">{canEdit && <button onClick={() => removeInventoryItem(s.key, i.id)} className="print:hidden"><Trash2 className="h-3.5 w-3.5" style={{ color: SEAT.occupied.color }} /></button>}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  {canEdit && (
+                    <div className="flex flex-wrap items-center gap-2 rounded-md p-3" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                      <select value={invForm.category} onChange={(e) => setInvForm({ ...invForm, category: e.target.value })} className="rounded px-2 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }}>
+                        {ITEM_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                      <input value={invForm.model} onChange={(e) => setInvForm({ ...invForm, model: e.target.value })} placeholder="Item / model name" className="flex-1 min-w-[140px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input type="number" min={0} value={invForm.purchased} onChange={(e) => setInvForm({ ...invForm, purchased: e.target.value })} placeholder="Starting qty" className="w-24 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <input value={invForm.serials} onChange={(e) => setInvForm({ ...invForm, serials: e.target.value })} placeholder="Serial numbers, comma-separated (optional)" className="w-full rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                      <button onClick={() => addInventoryItem(s.key)} className="flex items-center gap-1 rounded px-2.5 py-1.5 text-xs font-medium text-white" style={{ background: C.primary }}><Plus className="h-3.5 w-3.5" /> Add</button>
+                      <p className="w-full text-[11px]" style={{ color: C.sub }}>Use this to set a starting stock count for something you already have, without a logged PO. New purchases and distributions still update this same item.</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {siteView === "home" && (
+                <div className="space-y-3">
+                  <p className="text-xs" style={{ color: C.sub }}>Equipment given to a user for work-from-home use — same person as their office desk, just gear that isn't sitting at that desk. Still pulls from the same Inventory as everything else.</p>
+                  <div className="overflow-hidden rounded-md" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                    <table className="w-full text-sm">
+                      <thead><tr style={{ borderBottom: `1px solid ${C.border}`, color: C.sub }} className="text-left text-xs"><th className="px-3 py-2">User</th><th className="px-3 py-2">Category</th><th className="px-3 py-2">Item / model</th><th className="px-3 py-2">Qty</th><th className="px-3 py-2">Serial</th><th className="px-3 py-2">Date</th><th className="px-3 py-2">Remarks</th><th className="px-3 py-2"></th></tr></thead>
+                      <tbody>
+                        {siteHomeItems.length === 0 && <tr><td colSpan={8} className="px-3 py-6 text-center text-xs" style={{ color: C.sub }}>No home equipment logged for this site yet.</td></tr>}
+                        {[...siteHomeItems].sort((a, b) => a.person.localeCompare(b.person)).map((r) => (
+                          <tr key={r.id} style={{ borderBottom: `1px solid ${C.border}` }}>
+                            <td className="px-3 py-2 font-medium">{r.person}</td>
+                            <td className="px-3 py-2" style={{ color: C.sub }}>{r.category}</td>
+                            <td className="px-3 py-2">{r.model}</td>
+                            <td className="px-3 py-2">{r.qty}</td>
+                            <td className="px-3 py-2" style={{ color: C.sub }}>{r.serial || "—"}</td>
+                            <td className="px-3 py-2 text-xs" style={{ color: C.sub }}>{r.date}</td>
+                            <td className="px-3 py-2" style={{ color: C.sub }}>{r.note || "—"}</td>
+                            <td className="px-3 py-2">{canEdit && <button onClick={() => removeHomeItem(s.key, r.id)} className="print:hidden"><Trash2 className="h-3.5 w-3.5" style={{ color: SEAT.occupied.color }} /></button>}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {canEdit && (() => {
+                    const matchingInvItem = (inventory[s.key] || []).find((i) => i.category === homeItemForm.category && i.model.trim().toLowerCase() === homeItemForm.model.trim().toLowerCase());
+                    const availableSerials = matchingInvItem?.serials || [];
+                    return (
+                      <div className="flex flex-wrap items-center gap-2 rounded-md p-3" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+                        <input value={homeItemForm.person} onChange={(e) => setHomeItemForm({ ...homeItemForm, person: e.target.value })} placeholder="Person's name" list="known-user-names" className="w-40 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                        <select value={homeItemForm.category} onChange={(e) => setHomeItemForm({ ...homeItemForm, category: e.target.value, serial: "" })} className="rounded px-2 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }}>
+                          {ITEM_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                        <input value={homeItemForm.model} onChange={(e) => setHomeItemForm({ ...homeItemForm, model: e.target.value, serial: "" })} placeholder="Item / model" list="known-inventory-models" className="flex-1 min-w-[140px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                        {availableSerials.length > 0 ? (
+                          <select value={homeItemForm.serial} onChange={(e) => setHomeItemForm({ ...homeItemForm, serial: e.target.value })} className="rounded px-2 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }}>
+                            <option value="">No serial / any unit</option>
+                            {availableSerials.map((sn) => <option key={sn} value={sn}>SN {sn}</option>)}
+                          </select>
+                        ) : (
+                          <input type="number" min={1} value={homeItemForm.qty} onChange={(e) => setHomeItemForm({ ...homeItemForm, qty: e.target.value })} className="w-16 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} title="Quantity" />
+                        )}
+                        <input value={homeItemForm.note} onChange={(e) => setHomeItemForm({ ...homeItemForm, note: e.target.value })} placeholder="Note / remarks (optional)" className="flex-1 min-w-[120px] rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} />
+                        <input type="date" value={homeItemForm.date} onChange={(e) => setHomeItemForm({ ...homeItemForm, date: e.target.value })} className="w-36 rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} title="Date given (defaults to today)" />
+                        <button onClick={() => addHomeItem(s.key)} className="flex items-center gap-1 rounded px-2.5 py-1.5 text-xs font-medium text-white" style={{ background: C.primary }}><Plus className="h-3.5 w-3.5" /> Add</button>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
@@ -1377,7 +2043,7 @@ function DeskDashboard() {
                   <div style={{ breakBefore: "page" }}>
                     <h3 className="mb-2 text-sm font-semibold">{s.label} — User setup</h3>
                     <table className="w-full text-xs" style={{ border: `1px solid ${C.border}` }}>
-                      <thead><tr style={{ background: C.grid }}><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>User</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Desk #</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Mouse</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Headset</th>{s.key === "dubai" && <th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Laptop</th>}</tr></thead>
+                      <thead><tr style={{ background: C.grid }}><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>User</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Desk #</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Mouse</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Headset</th><th className="border px-2 py-1 text-left" style={{ borderColor: C.border }}>Laptop</th></tr></thead>
                       <tbody>
                         {siteDesks.filter((d) => d.user).length === 0 && <tr><td colSpan={5} className="border px-2 py-3 text-center" style={{ borderColor: C.border, color: C.sub }}>No desks assigned to a user yet.</td></tr>}
                         {[...siteDesks].filter((d) => d.user).sort((a, b) => a.user.localeCompare(b.user)).map((d) => (
@@ -1386,7 +2052,7 @@ function DeskDashboard() {
                             <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.number}</td>
                             <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.mouse ? (d.equipment.mouseModel || "Yes") : "—"}</td>
                             <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.headset ? (d.equipment.headsetModel || "Yes") : "—"}</td>
-                            {s.key === "dubai" && <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.laptop ? (d.equipment.laptopModel || "Yes") : "—"}</td>}
+                            <td className="border px-2 py-1" style={{ borderColor: C.border }}>{d.equipment.laptop ? (d.equipment.laptopModel || "Yes") : "—"}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -1406,14 +2072,8 @@ function DeskDashboard() {
               <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Assigned user</label>
               <input disabled={!canEdit} defaultValue={selected.user ?? ""} placeholder="Unassigned" list="known-user-names" className="mb-3 w-full rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} onBlur={(e) => {
                 const v = e.target.value || null;
-                if (v !== selected.user) {
-                  updateDesk(selected.id, {
-                    user: v,
-                    equipment: { ...selected.equipment, laptop: false, laptopModel: "", headset: false, headsetModel: "", mouse: false, mouseModel: "" },
-                  }, v ? `Assigned to ${v} (personal gear cleared)` : "Unassigned (personal gear cleared)");
-                }
+                if (v !== selected.user) reassignDeskUser(selected, v);
               }} />
-              <datalist id="known-user-names">{knownUserNames.map((n) => <option key={n} value={n} />)}</datalist>
               <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Status</label>
               <select disabled={!canEdit} value={selected.status} className="mb-3 w-full rounded px-2.5 py-1.5 text-sm" style={{ border: `1px solid ${C.border}` }} onChange={(e) => updateDesk(selected.id, { status: e.target.value }, `Status → ${SEAT[e.target.value].label}`)}>
                 {Object.entries(SEAT).map(([k, st]) => <option key={k} value={k}>{st.label}</option>)}
@@ -1433,10 +2093,53 @@ function DeskDashboard() {
 
               <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Personal gear <span className="font-normal" style={{ color: C.sub }}>— goes with the person, cleared when reassigned</span></label>
               <div className="mb-3 space-y-1.5">
-                <EquipRow icon={Mouse} label="Mouse" disabled={!canEdit} checked={selected.equipment.mouse} model={selected.equipment.mouseModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, mouse: v } }, `Mouse ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, mouseModel: v } })} />
-                <EquipRow icon={Headphones} label="Headset" disabled={!canEdit} checked={selected.equipment.headset} model={selected.equipment.headsetModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, headset: v } }, `Headset ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, headsetModel: v } })} />
-                {selected.site === "dubai" && <EquipRow icon={Laptop} label="Laptop" disabled={!canEdit} checked={selected.equipment.laptop} model={selected.equipment.laptopModel} onToggle={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, laptop: v } }, `Laptop ${v ? "added" : "removed"}`)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, laptopModel: v } })} />}
+                <EquipRow icon={Mouse} label="Mouse" disabled={!canEdit} checked={selected.equipment.mouse}
+                  model={selected.equipment.mouseModel} onToggle={(v) => togglePersonalGear(selected, "mouse", "Mouse", v)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, mouseModel: v } })}
+                  serial={selected.equipment.mouseSerial} onSerial={(v) => setPersonalGearSerial(selected, "mouse", "Mouse", v)}
+                  availableSerials={(inventory[selected.site] || []).find((i) => i.category === "Mouse" && i.model.trim().toLowerCase() === (selected.equipment.mouseModel || "").trim().toLowerCase())?.serials || []} />
+                <EquipRow icon={Headphones} label="Headset" disabled={!canEdit} checked={selected.equipment.headset}
+                  model={selected.equipment.headsetModel} onToggle={(v) => togglePersonalGear(selected, "headset", "Headphone", v)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, headsetModel: v } })}
+                  serial={selected.equipment.headsetSerial} onSerial={(v) => setPersonalGearSerial(selected, "headset", "Headphone", v)}
+                  availableSerials={(inventory[selected.site] || []).find((i) => i.category === "Headphone" && i.model.trim().toLowerCase() === (selected.equipment.headsetModel || "").trim().toLowerCase())?.serials || []} />
+                <EquipRow icon={Laptop} label="Laptop" disabled={!canEdit} checked={selected.equipment.laptop}
+                  model={selected.equipment.laptopModel} onToggle={(v) => togglePersonalGear(selected, "laptop", "Laptop", v)} onModel={(v) => updateDesk(selected.id, { equipment: { ...selected.equipment, laptopModel: v } })}
+                  serial={selected.equipment.laptopSerial} onSerial={(v) => setPersonalGearSerial(selected, "laptop", "Laptop", v)}
+                  availableSerials={(inventory[selected.site] || []).find((i) => i.category === "Laptop" && i.model.trim().toLowerCase() === (selected.equipment.laptopModel || "").trim().toLowerCase())?.serials || []} />
               </div>
+
+              <label className="mb-1 block text-xs font-medium" style={{ color: C.sub }}>Extra items given <span className="font-normal" style={{ color: C.sub }}>— chargers, spare mouse, SSD, speaker, etc</span></label>
+              <div className="mb-3 space-y-1">
+                {(selected.extraItems || []).length === 0 && <p className="text-[11px]" style={{ color: C.sub }}>None logged.</p>}
+                {(selected.extraItems || []).map((r) => (
+                  <div key={r.id} className="flex items-center justify-between rounded px-2 py-1 text-xs" style={{ border: `1px solid ${C.border}` }}>
+                    <span>{r.qty}× {r.model} <span style={{ color: C.sub }}>({r.category}{r.serial ? ` · SN ${r.serial}` : ""})</span></span>
+                    {canEdit && <button onClick={() => removeExtraItem(selected.id, selected.site, r.id)}><Trash2 className="h-3 w-3" style={{ color: SEAT.occupied.color }} /></button>}
+                  </div>
+                ))}
+              </div>
+              {canEdit && (() => {
+                const matchingInvItem = (inventory[selected.site] || []).find((i) => i.category === extraItemForm.category && i.model.trim().toLowerCase() === extraItemForm.model.trim().toLowerCase());
+                const availableSerials = matchingInvItem?.serials || [];
+                return (
+                  <div className="mb-3 flex flex-wrap items-center gap-1.5">
+                    <select value={extraItemForm.category} onChange={(e) => setExtraItemForm({ ...extraItemForm, category: e.target.value, serial: "" })} className="rounded px-2 py-1 text-xs" style={{ border: `1px solid ${C.border}` }}>
+                      {ITEM_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                    <input value={extraItemForm.model} onChange={(e) => setExtraItemForm({ ...extraItemForm, model: e.target.value, serial: "" })} placeholder="Item name" list="known-inventory-models-modal" className="flex-1 min-w-[90px] rounded px-2 py-1 text-xs" style={{ border: `1px solid ${C.border}` }} />
+                    {availableSerials.length > 0 ? (
+                      <select value={extraItemForm.serial} onChange={(e) => setExtraItemForm({ ...extraItemForm, serial: e.target.value })} className="rounded px-2 py-1 text-xs" style={{ border: `1px solid ${C.border}` }}>
+                        <option value="">No serial / any unit</option>
+                        {availableSerials.map((sn) => <option key={sn} value={sn}>SN {sn}</option>)}
+                      </select>
+                    ) : (
+                      <input type="number" min={1} value={extraItemForm.qty} onChange={(e) => setExtraItemForm({ ...extraItemForm, qty: e.target.value })} className="w-14 rounded px-2 py-1 text-xs" style={{ border: `1px solid ${C.border}` }} />
+                    )}
+                    <button onClick={() => addExtraItem(selected.id, selected.site)} className="rounded px-2 py-1 text-xs font-medium text-white" style={{ background: C.primary }}>Add</button>
+                    <datalist id="known-inventory-models-modal">{(inventory[selected.site] || []).map((i) => <option key={i.id} value={i.model} />)}</datalist>
+                  </div>
+                );
+              })()}
+
               <div className="mt-4 pt-3" style={{ borderTop: `1px solid ${C.border}` }}>
                 <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium" style={{ color: C.sub }}><History className="h-3.5 w-3.5" /> Recent activity</div>
                 <ul className="space-y-1 text-[11px]" style={{ color: C.sub }}>{selected.history.slice(0, 4).map((h, i) => <li key={i} className="flex justify-between gap-2"><span>{h.action}</span><span className="shrink-0">{new Date(h.ts).toLocaleDateString()}</span></li>)}</ul>
@@ -1498,6 +2201,9 @@ function DeskDashboard() {
                         </div>
                       </div>
                       <p className="mt-1 text-[11px]" style={{ color: C.sub }}>{sum.occupied} occupied · {sum.available} available · {(zones[s.key] || []).length} spaces · {assetCount} logged assets</p>
+                      {s.key === "dubai" && (
+                        <button onClick={resetDubaiToFloorPlan} className="mt-1.5 rounded px-2 py-1 text-[11px] font-medium" style={{ border: `1px solid ${C.border}`, color: C.primary }}>Reset to traced floor plan</button>
+                      )}
                     </div>
                   );
                 })}
